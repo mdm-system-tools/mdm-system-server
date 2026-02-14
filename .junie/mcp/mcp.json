@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/usr/bin/php",
+            "args": [
+                "/home/edu/Projetos/mdm-system-server/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
