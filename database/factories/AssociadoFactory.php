@@ -22,7 +22,7 @@ class AssociadoFactory extends Factory
             'numero_inscricao' => $faker->numerify("#########"),
             'nome' => $faker->name,
             'RG' => $faker->numerify('#########'),
-            'CPF' => $faker->numerify('#########'),
+            'CPF' => $faker->numerify('###########'),
             'estado_civil' => $faker->randomElement(['Solteiro', 'Casado', 'Divorciado', 'Viúvo']),
             'status' => true,
             'NIS' => $faker->numerify('###########'),

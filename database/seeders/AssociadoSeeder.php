@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Associado;
+use App\Models\Grupo;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
@@ -28,7 +29,8 @@ class AssociadoSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail,
                 'data_de_nascimento' => $faker->date('Y-m-d', '2005-01-01'),
                 'renda_familiar' => $faker->randomFloat(2, 1300, 5000),
-                'data_de_inscricao' => now()->format('Y-m-d'),
+                'data_de_inscricao' => $faker->date('Y-m-d', '2026-01-01'),
+                'grupo_id' => Grupo::inRandomOrder()->first()->id,
             ]);
         }
     }

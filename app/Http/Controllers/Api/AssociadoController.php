@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAssociadoRequest;
 use App\Http\Requests\UpdateAssociadoRequest;
+use App\Http\Resources\AssociadoResource;
 use App\Models\Associado;
 use Exception;
 
@@ -15,7 +16,7 @@ class AssociadoController extends Controller
      */
     public function index()
     {
-        return response()->json(Associado::all());
+        return AssociadoResource::collection(Associado::with(["dependente", "grupo"])->get());
     }
 
     /**
@@ -33,7 +34,7 @@ class AssociadoController extends Controller
      */
     public function show(Associado $associado)
     {
-        return response()->json($associado);
+        return new AssociadoResource($associado);
     }
 
     /**
@@ -61,6 +62,28 @@ class AssociadoController extends Controller
             }
         } catch (Exception $e) {
 
+            return response()->json($e);
+        }
+    }
+
+    public function activate(Associado $associado)
+    {
+        try {
+            if ($associado->update(['status' => true])) {
+                return response()->json($associado);
+            }
+        } catch (Exception $e) {
+            return response()->json($e);
+        }
+    }
+
+    public function deactivate(Associado $associado)
+    {
+        try {
+            if ($associado->update(['status' => false])) {
+                return response()->json($associado);
+            }
+        } catch (Exception $e) {
             return response()->json($e);
         }
     }
