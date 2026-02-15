@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('projetos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("grupo_id");
             $table->decimal("valor", 5,2);
             $table->char("nome", 100);
             $table->char("regiao", 10);

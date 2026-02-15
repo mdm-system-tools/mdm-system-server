@@ -26,11 +26,13 @@ return new class extends Migration
 
             $table->date('data_de_nascimento');
             $table->decimal('renda_familiar', 10);
+            // TODO Apenas data (dd/mm/yyyy)
             $table->date('data_de_inscricao');
 
-            $table->foreignId('documentos_img_id')->nullable()->constrained('anexos');
-            $table->foreignId('certidao_id')->nullable()->constrained('anexos');
+            $table->binary("documento_img")->nullable();
+            $table->binary("certidao_img")->nullable();
             $table->foreignId("dependente_id")->nullable();
+            $table->foreignId("grupo_id")->nullable();
 
             $table->timestamps();
         });

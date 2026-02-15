@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('grupos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("associado_id");
             $table->foreignId("projeto_id");
-            $table->char("horario", 5);
+            $table->time("horario");
 
             $table->timestamps();
         });
