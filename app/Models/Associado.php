@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Associado extends Model
 {
@@ -44,4 +46,15 @@ class Associado extends Model
         'data_de_nascimento' => 'date:d/m/Y',
         'data_de_inscricao' => 'date:d/m/Y',
     ];
+
+    function dependente(): HasOne
+    {
+        return $this->hasOne(Dependente::class,
+            'numero_inscricao');
+    }
+
+    function grupo(): BelongsTo
+    {
+        return $this->belongsTo(Grupo::class);
+    }
 }
