@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Associado;
+use App\Models\Grupo;
+use App\Models\Projeto;
+use Database\Factories\AssociadoFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,18 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            // grupo depende de projeto
-            ProjetoSeeder::class,
-            GrupoSeeder::class,
-
-            AssociadoSeeder::class,
-//            DependenteSeeder::class,
-//            AnexoSeeder::class,
-
-//            AgendaSeeder::class,
-//            ChamadaSeeder::class,
-//            ReuniaoSeeder::class,
-        ]);
+        Projeto::factory()->count(5)->create();
+        Grupo::factory()->count(5)->create();
+        Associado::factory()->count(10)->create();
     }
 }

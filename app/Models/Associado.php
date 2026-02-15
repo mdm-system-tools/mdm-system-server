@@ -9,16 +9,12 @@ class Associado extends Model
 {
     use HasFactory;
 
-    // Nome da tabela (ajuste se estiver no singular no banco)
     protected $table = 'associados';
 
-    // Definindo a chave primária customizada
     protected $primaryKey = 'numero_inscricao';
 
-    // Desativando o autoincremento (já que você define o número)
     public $incrementing = false;
 
-    // Tipo da chave primária
     protected $keyType = 'int';
 
     /**
@@ -42,13 +38,10 @@ class Associado extends Model
         'dependente_id',
     ];
 
-    /**
-     * Casts para garantir que os dados saiam no formato correto (opcional)
-     */
     protected $casts = [
         'status' => 'boolean',
         'renda_familiar' => 'decimal:2',
-        'data_de_nascimento' => 'date',
-        'data_de_inscricao' => 'date',
+        'data_de_nascimento' => 'date:d/m/Y',
+        'data_de_inscricao' => 'date:d/m/Y',
     ];
 }
