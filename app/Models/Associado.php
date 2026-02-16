@@ -33,9 +33,9 @@ class Associado extends Model
         'NIS',
         'cras',
         'email',
-        'data_de_nascimento',
+        'data_nascimento',
         'renda_familiar',
-        'data_de_inscricao',
+        'data_inscricao',
         'documentos_img_id',
         'certidao_id',
         "grupo_id",
@@ -44,8 +44,8 @@ class Associado extends Model
     protected $casts = [
         'status' => 'boolean',
         'renda_familiar' => 'decimal:2',
-        'data_de_nascimento' => 'date:d/m/Y',
-        'data_de_inscricao' => 'date:d/m/Y',
+        'data_nascimento' => 'date:d/m/Y',
+        'data_inscricao' => 'date:d/m/Y',
     ];
 
     function grupo(): BelongsTo
