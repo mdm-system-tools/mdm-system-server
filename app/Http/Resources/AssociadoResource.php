@@ -37,6 +37,10 @@ class AssociadoResource extends JsonResource
             ] : null,
             "documento_img" => $this->documento_img,
             "certidao_img" => $this->certidao_img,
+            "representante" => $this->representante ? [
+                "nome" => $this->representante->nome,
+                "CPF" => $this->representante->CPF,
+            ] : null,
         ];
     }
 }

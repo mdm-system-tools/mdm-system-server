@@ -18,10 +18,12 @@ class ChamadaFactory extends Factory
      */
     public function definition(): array
     {
+        $associado = Associado::inRandomOrder()->first();
+
         return [
-            'numero_inscricao' => Associado::inRandomOrder()->first()?->numero_inscricao,
-            'reuniao_id' => Reuniao::inRandomOrder()->first()?->id,
-            'representante' => $this->faker->boolean(),
+            'numero_inscricao' => $associado->numero_inscricao,
+            'reuniao_id' => Reuniao::inRandomOrder()->first()->id,
+            'representante' => $associado->representante() && $this->faker->boolean(),
             'presenca' => $this->faker->boolean(),
             'justificativa' => fn(array $attributes) => !$attributes['presenca'] ? $this->faker->sentence() : null,
         ];

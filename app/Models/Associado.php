@@ -71,11 +71,16 @@ class Associado extends Model
 
     function endereco(): HasOne
     {
-        return $this->hasOne(Endereco::class);
+        return $this->hasOne(Endereco::class, 'numero_inscricao');
     }
 
     function tituloEleitor(): HasOne
     {
-        return $this->hasOne(TituloEleitor::class);
+        return $this->hasOne(TituloEleitor::class, 'numero_inscricao');
+    }
+
+    function representante(): HasOne
+    {
+        return $this->hasOne(Representante::class, 'numero_inscricao');
     }
 }
