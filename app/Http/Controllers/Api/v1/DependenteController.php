@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Requests\StoreChamadaRequest;
-use App\Http\Requests\UpdateChamadaRequest;
-use App\Models\Chamada;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreDependenteRequest;
+use App\Http\Requests\UpdateDependenteRequest;
+use App\Models\Dependente;
 
-class ChamadaController extends Controller
+class DependenteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class ChamadaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChamadaRequest $request)
+    public function store(StoreDependenteRequest $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class ChamadaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Chamada $chamada)
+    public function show(Dependente $dependente)
     {
         //
     }
@@ -43,7 +44,7 @@ class ChamadaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Chamada $chamada)
+    public function edit(Dependente $dependente)
     {
         //
     }
@@ -51,7 +52,7 @@ class ChamadaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChamadaRequest $request, Chamada $chamada)
+    public function update(UpdateDependenteRequest $request, Dependente $dependente)
     {
         //
     }
@@ -59,7 +60,7 @@ class ChamadaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chamada $chamada)
+    public function destroy(Dependente $dependente)
     {
         //
     }
