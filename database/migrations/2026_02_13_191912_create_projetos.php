@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('projetos', function (Blueprint $table) {
             $table->id();
             $table->decimal("valor", 5,2);
-            $table->char("nome", 100);
-            $table->char("regiao", 10);
+            $table->string("nome", 100);
+            $table->string("regiao", 10);
+            $table->boolean("status")->default(true);
+            $table->boolean("concluido")->default(false);
             $table->timestamps();
         });
     }

@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('pagamentos', function (Blueprint $table) {
-            $table->unsignedSmallInteger('id');
-            $table->unsignedSmallInteger('numero_inscricao');
+            $table->unsignedBigInteger('id');
+            $table->unsignedBigInteger('numero_inscricao');
 
             $table->decimal('valor', 5, 2);
             $table->string('mes_de_referencia', 7);

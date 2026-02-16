@@ -18,10 +18,10 @@ return new class extends Migration
             $table->primary(['id', 'numero_inscricao']);
 
             $table->char("CEP", 9);
-            $table->char("rua", 150);
-            $table->char("bairro", 100);
-            $table->char("numero", 10);
-            $table->char("municipio", 20);
+            $table->string("rua", 150);
+            $table->string("bairro", 100);
+            $table->string("numero", 10);
+            $table->string("municipio", 20);
 
             $table->timestamps();
         });

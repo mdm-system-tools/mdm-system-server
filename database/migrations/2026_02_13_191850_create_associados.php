@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('associados', function (Blueprint $table) {
             $table->unsignedBigInteger('numero_inscricao')->primary();
 
-            $table->string('nome');
+            $table->string('nome', 100);
             $table->char('RG', 9)->unique();
             $table->char('CPF', 11)->unique();
             $table->string('estado_civil', 20);
