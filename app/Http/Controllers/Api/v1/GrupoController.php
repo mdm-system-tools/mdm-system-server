@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreGrupoRequest;
+use App\Http\Requests\UpdateGrupoRequest;
 use App\Http\Resources\GrupoResource;
 use App\Models\Grupo;
 use Exception;
@@ -22,15 +24,10 @@ class GrupoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreGrupoRequest $request)
     {
-        $valid = $request->validate([
-            "horario" => ["required", "date_format:H:i"],
-            "projeto_id" => ["required", "exists:App\Models\Projeto,id"],
-        ]);
-
         try {
-            if (Grupo::create($valid) != null) {
+            if (Grupo::create($request->validated()) != null) {
                 return response()->json(["message" => "criando com sucesso"], ResponseAlias::HTTP_CREATED);
             }
         } catch (Exception $e) {
@@ -49,14 +46,10 @@ class GrupoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Grupo $grupo)
+    public function update(UpdateGrupoRequest $request, Grupo $grupo)
     {
-        $valid = $request->validate([
-            "horario" => ["date_format:H:i"],
-            "projeto_id" => ["exists:App\Models\Projeto,id"],
-        ]);
         try {
-            if ($grupo->update($valid)) {
+            if ($grupo->update($request->validated())) {
                 return response()->json(['message' => 'atualizado com sucesso'], ResponseAlias::HTTP_OK);
             }
         } catch (Exception $e) {
