@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Grupo;
+use App\Models\Projeto;
+use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
