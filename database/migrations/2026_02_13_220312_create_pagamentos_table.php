@@ -11,20 +11,13 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('pagamentos', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
-            $table->unsignedBigInteger('numero_inscricao');
+            $table->id();
+            $table->foreignId("numero_inscricao")->constrained("associados", "numero_inscricao");
 
             $table->decimal('valor', 5, 2);
             $table->string('mes_de_referencia', 7);
 
             $table->binary("comprovante")->nullable();
-
-            $table->primary(['id', 'numero_inscricao']);
-
-            $table->foreign('numero_inscricao')
-                ->references('numero_inscricao')
-                ->on('associados')
-                ->onDelete('cascade');
 
             $table->timestamps();
         });
