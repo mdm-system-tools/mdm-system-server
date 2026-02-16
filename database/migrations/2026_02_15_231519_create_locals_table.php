@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,10 +13,10 @@ return new class extends Migration
         Schema::create('locals', function (Blueprint $table) {
             $table->id();
             $table->foreignId("reuniao_id");
-            $table->char("nome", 100);
-            $table->char("endereco", 100);
-            $table->char("regiao", 100);
-            $table->boolean("tipo");
+            $table->string("nome", 100);
+            $table->string("endereco", 100);
+            $table->string("regiao", 100);
+            $table->boolean("tipo"); // externo ou interno
             $table->timestamps();
         });
     }
