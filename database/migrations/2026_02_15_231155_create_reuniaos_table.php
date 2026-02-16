@@ -12,8 +12,13 @@ return new class extends Migration {
     {
         Schema::create('reuniaos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("local_id");
             $table->foreignId("projeto_id");
-            $table->date("data_reuniao");
+
+            $table->date("horario_inicio");
+            $table->date("horario_fim");
+            $table->date("data_marcada");
+
             $table->timestamps();
         });
     }
