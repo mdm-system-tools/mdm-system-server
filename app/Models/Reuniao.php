@@ -5,21 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Reuniao extends Model
 {
     use HasFactory;
-    protected $fillable =[
+
+    protected $fillable = [
+        'id',
+        'local_id',
         "projeto_id",
-        "data_reuniao",
+        "data_marcada",
+        "horario_inicio",
+        "horario_fim",
     ];
 
     function projeto(): BelongsTo
     {
         return $this->belongsTo(Projeto::class);
     }
-    function locals(): BelongsTo
+    function local(): BelongsTo
     {
         return $this->belongsTo(Local::class);
     }
