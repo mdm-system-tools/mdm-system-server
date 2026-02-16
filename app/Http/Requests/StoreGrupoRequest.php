@@ -22,9 +22,8 @@ class StoreGrupoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'associado_id' => 'required|exists:associados,numero_inscricao',
-            'projeto_id' => 'required|exists:projetos,id',
-            'horario' => ['required', 'date', 'size:5'],
+            "horario" => ["required", "date_format:H:i"],
+            "projeto_id" => ["required", "exists:App\Models\Projeto,id"],
         ];
     }
 }
