@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("numero_inscricao")->constrained('associados', "numero_inscricao");
             $table->foreignId("reuniao_id");
-            $table->boolean('representante');
+            $table->boolean('representante')->nullable();
             $table->boolean('presenca');
             $table->string("justificativa", 100)->nullable();
             $table->timestamps();
