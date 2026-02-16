@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('locals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("reuniao_id");
             $table->string("nome", 100);
             $table->string("endereco", 100);
             $table->string("regiao", 100);
