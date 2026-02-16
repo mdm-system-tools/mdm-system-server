@@ -11,7 +11,7 @@ class StoreChamadaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,29 @@ class StoreChamadaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'numero_inscricao' => [
+                'required',
+                'exists:associados,numero_inscricao'
+            ],
+            'reuniao_id' => [
+                'required',
+                'exists:reuniaos,id'
+            ],
+            'representante' => [
+                'required',
+                'boolean'
+            ],
+            'presenca' => [
+                'required',
+                'boolean'
+            ],
+            'justificativa' => [
+                'nullable',
+                'string',
+                'max:255',
+                'required_if:presenca,false,0',
+                'prohibited_if:presenca,true,1'
+            ],
         ];
     }
 }

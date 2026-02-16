@@ -11,7 +11,7 @@ class UpdateReuniaoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,22 @@ class UpdateReuniaoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'local_id' => [
+                'exists:locals,id'
+            ],
+            'projeto_id' => [
+                'exists:projetos,id'
+            ],
+            'data_marcada' => [
+                'date_format:d/m/Y'
+            ],
+            'horario_inicio' => [
+                'date_format:H:i'
+            ],
+            'horario_fim' => [
+                'date_format:H:i',
+                'after:horario_inicio'
+            ],
         ];
     }
 }

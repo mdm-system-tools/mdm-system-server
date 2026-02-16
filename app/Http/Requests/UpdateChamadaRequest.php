@@ -11,7 +11,7 @@ class UpdateChamadaRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,23 @@ class UpdateChamadaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'numero_inscricao' => [
+                'exists:associados,numero_inscricao'
+            ],
+            'reunioes_id' => [
+                'exists:reuniaos,id'
+            ],
+            'representante' => [
+                'boolean'
+            ],
+            'presenca' => [
+                'boolean'
+            ],
+            'justificativa' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
         ];
     }
 }
