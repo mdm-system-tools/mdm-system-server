@@ -19,9 +19,9 @@ class ProjetoFactory extends Factory
     {
         $faker = \Faker\Factory::create('pt_BR');
         return [
-            'valor' => $faker->randomFloat(2, 100, 999), // Decimal(5,2) suporta até 999.99
+            'valor' => $faker->randomFloat(2, 100, 999),
             'nome' => $faker->jobTitle,
-            'regiao' => $faker->lexify('Regiao ???'), // Gera algo como 'Regiao ABC'
+            'regiao' => $faker->lexify('Regiao ???'),
         ];
     }
 }
