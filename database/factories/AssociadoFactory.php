@@ -28,9 +28,9 @@ class AssociadoFactory extends Factory
             'NIS' => $faker->numerify('###########'),
             'cras' => $faker->numerify('###########'),
             'email' => $faker->unique()->safeEmail,
-            'data_de_nascimento' => $faker->date('Y-m-d', '2005-01-01'),
+            'data_nascimento' => $faker->date('Y-m-d', '2005-01-01'),
             'renda_familiar' => $faker->randomFloat(2, 1300, 3000),
-            'data_de_inscricao' => $faker->date('Y-m-d', '2026-01-01'),
+            'data_inscricao' => $faker->date('Y-m-d', '2026-01-01'),
             'grupo_id' => Grupo::inRandomOrder()->first()->id,
         ];
     }

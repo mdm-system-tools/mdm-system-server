@@ -16,7 +16,7 @@ class AssociadoController extends Controller
      */
     public function index()
     {
-        return AssociadoResource::collection(Associado::with(["dependente", "grupo"])->get());
+        return AssociadoResource::collection(Associado::with(["dependentes", "grupo"])->get());
     }
 
     /**
