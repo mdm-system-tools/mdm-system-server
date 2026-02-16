@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('reuniaos', function (Blueprint $table) {
             $table->id();
             $table->foreignId("projeto_id");
-            $table->foreignId("chamada_id");
             $table->date("data_reuniao");
             $table->timestamps();
         });

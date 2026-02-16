@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Associado extends Model
@@ -37,7 +38,7 @@ class Associado extends Model
         'data_de_inscricao',
         'documentos_img_id',
         'certidao_id',
-        'dependente_id',
+        "grupo_id",
     ];
 
     protected $casts = [
@@ -47,14 +48,34 @@ class Associado extends Model
         'data_de_inscricao' => 'date:d/m/Y',
     ];
 
-    function dependente(): HasOne
-    {
-        return $this->hasOne(Dependente::class,
-            'numero_inscricao');
-    }
-
     function grupo(): BelongsTo
     {
         return $this->belongsTo(Grupo::class);
+    }
+
+    function chamadas(): HasMany
+    {
+        return $this->hasMany(Chamada::class);
+    }
+
+    function pagamentos(): HasMany
+    {
+        return $this->hasMany(Pagamento::class);
+    }
+
+    function dependentes(): HasMany
+    {
+        return $this->hasMany(Dependente::class,
+            'numero_inscricao');
+    }
+
+    function endereco(): HasOne
+    {
+        return $this->hasOne(Endereco::class);
+    }
+
+    function tituloEleitor(): HasOne
+    {
+        return $this->hasOne(TituloEleitor::class);
     }
 }

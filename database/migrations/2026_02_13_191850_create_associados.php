@@ -15,25 +15,23 @@ return new class extends Migration
             $table->unsignedBigInteger('numero_inscricao')->primary();
 
             $table->string('nome', 100);
-            $table->char('RG', 9)->unique();
-            $table->char('CPF', 11)->unique();
             $table->string('estado_civil', 20);
-            $table->boolean('status')->default(1);
+            $table->decimal('renda_familiar', 10)->nullable();
 
-            $table->char('NIS', 11)->unique();
-            $table->char('cras', 11)->unique();
-            $table->string('email', 100)->unique();
+            $table->char('CPF', 11)->unique();
+            $table->char('RG', 9)->unique()->nullable();
+            $table->char('NIS', 11)->unique()->nullable();
+            $table->char('cras', 11)->unique()->nullable();
+            $table->string('email', 100)->unique()->nullable();
 
             $table->date('data_de_nascimento');
-            $table->decimal('renda_familiar', 10);
-            // TODO Apenas data (dd/mm/yyyy)
-            $table->date('data_de_inscricao');
+            $table->date('data_de_inscricao')->default(now()->format('Y-m-d'));
 
             $table->binary("documento_img")->nullable();
             $table->binary("certidao_img")->nullable();
-            $table->foreignId("dependente_id")->nullable();
             $table->foreignId("grupo_id")->nullable();
 
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

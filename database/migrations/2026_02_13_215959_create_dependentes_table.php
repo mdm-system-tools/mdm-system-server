@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('dependentes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("numero_inscricao")->constrained('associados', "numero_inscricao");
+            $table->foreignId("numero_inscricao")->constrained('associados', "numero_inscricao")->cascadeOnDelete();
             $table->timestamps();
         });
     }

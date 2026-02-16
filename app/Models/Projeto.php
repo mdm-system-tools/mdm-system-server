@@ -22,4 +22,9 @@ class Projeto extends Model
     {
         return $this->hasMany(Grupo::class);
     }
+
+    function reunioes(): HasMany
+    {
+        return $this->hasMany(Reuniao::class);
+    }
 }
