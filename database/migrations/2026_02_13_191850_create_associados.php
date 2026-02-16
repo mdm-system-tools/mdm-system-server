@@ -24,8 +24,8 @@ return new class extends Migration
             $table->char('cras', 11)->unique()->nullable();
             $table->string('email', 100)->unique()->nullable();
 
-            $table->date('data_de_nascimento');
-            $table->date('data_de_inscricao')->default(now()->format('Y-m-d'));
+            $table->date('data_nascimento');
+            $table->date('data_inscricao')->default(now()->format('Y-m-d'));
 
             $table->binary("documento_img")->nullable();
             $table->binary("certidao_img")->nullable();
