@@ -20,7 +20,7 @@ class GrupoFactory extends Factory
         $faker = \Faker\Factory::create('pt_BR');
         return [
             "projeto_id" => Projeto::inRandomOrder()->first()->id,
-            "horario" => $faker->time(),
+            "horario" => $faker->time('H:i'),
         ];
     }
 }

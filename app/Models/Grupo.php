@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Grupo extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'projeto_id',
+        'horario',
+    ];
 
     protected $casts = [
         'horario' => 'datetime:H:i',
