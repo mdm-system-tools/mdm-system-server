@@ -12,7 +12,7 @@ class Chamada extends Model
 
     protected $fillable = [
         'numero_inscricao',
-        "reunioes_id",
+        "reuniao_id",
         "representante",
         "presenca",
         "justificativa"
