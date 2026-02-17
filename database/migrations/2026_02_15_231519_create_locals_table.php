@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->string("cidade", 100);
             $table->string("estado", 100);
             $table->string("regiao", 100);
-            $table->string("uf", 2);
             $table->boolean("tipo"); // externo ou interno
             $table->timestamps();
         });
