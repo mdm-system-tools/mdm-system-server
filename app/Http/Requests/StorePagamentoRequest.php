@@ -31,7 +31,7 @@ class StorePagamentoRequest extends FormRequest
                 'numeric',
                 'gt:0'
             ],
-            'mes_de_referencia' => [
+            'mes_referencia' => [
                 'required',
                 'date_format:m/Y'
             ],

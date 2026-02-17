@@ -13,7 +13,7 @@ class Pagamento extends Model
     protected $fillable = [
         "numero_inscricao",
         "valor",
-        "mes_de_referencia",
+        "mes_referencia",
         "comprovante",
     ];
 

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId("numero_inscricao")->constrained("associados", "numero_inscricao");
 
             $table->decimal('valor', 5, 2);
-            $table->string('mes_de_referencia', 7);
+            $table->string('mes_referencia', 7);
 
             $table->binary("comprovante")->nullable();
 

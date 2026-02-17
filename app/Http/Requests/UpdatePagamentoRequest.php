@@ -29,7 +29,7 @@ class UpdatePagamentoRequest extends FormRequest
                 'numeric',
                 'gt:0'
             ],
-            'mes_de_referencia' => [
+            'mes_referencia' => [
                 'date_format:m/Y'
             ],
             'comprovante' => [

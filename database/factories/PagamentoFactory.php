@@ -20,7 +20,7 @@ class PagamentoFactory extends Factory
         return [
             'numero_inscricao' => Associado::inRandomOrder()->first()->numero_inscricao,
             'valor' => $this->faker->randomFloat(2, 10, 500),
-            'mes_de_referencia' => $this->faker->dateTimeBetween('-1 year', 'now')->format('m/Y'),
+            'mes_referencia' => $this->faker->dateTimeBetween('-1 year', 'now')->format('m/Y'),
             'comprovante' => 'comprovantes/' . $this->faker->uuid() . '.pdf',
         ];
     }
