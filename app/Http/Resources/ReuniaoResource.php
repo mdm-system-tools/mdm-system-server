@@ -21,7 +21,7 @@ class ReuniaoResource extends JsonResource
             'local'          => $this->local?->endereco,
             'projeto'        => $this->projeto?->nome,
 
-            'data_marcada'   => Formatador::formatDateToDayMonthYear($this->data_marcada),
+            'data_marcada'   => $this->data_marcada,
             'horario_inicio' => Formatador::formatDateToHoursMinutes($this->horario_inicio),
             'horario_fim'    => Formatador::formatDateToHoursMinutes($this->horario_fim),
 

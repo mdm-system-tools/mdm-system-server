@@ -13,8 +13,13 @@ return new class extends Migration {
         Schema::create('locals', function (Blueprint $table) {
             $table->id();
             $table->string("nome", 100);
-            $table->string("endereco", 100);
+            $table->char("cep", 8);
+            $table->string("logradouro", 100);
+            $table->string("bairro", 100);
+            $table->string("cidade", 100);
+            $table->string("estado", 100);
             $table->string("regiao", 100);
+            $table->string("uf", 2);
             $table->boolean("tipo"); // externo ou interno
             $table->timestamps();
         });

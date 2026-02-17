@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\{AssociadoController,
     AuthController,
+    CepApiClientController,
     ChamadaController,
     GrupoController,
     LocalController,
@@ -64,4 +65,6 @@ Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
     // --- REPRESENTANTE ---
     Route::apiResource('representantes', RepresentanteController::class)
         ->missing($missingModel('Representante'));
+
+    Route::post("/cep", [CepApiClientController::class, 'searchCep']);
 });
