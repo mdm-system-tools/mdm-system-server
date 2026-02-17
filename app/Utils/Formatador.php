@@ -30,6 +30,11 @@ class Formatador
         return preg_replace("/(\d{3})(\d{2})(\d{1})(\d{1})/", "$1.$2-$3/$4", $cras);
     }
 
+    public static function formatCep($cep): string
+    {
+        return preg_replace("/(\d{5})(\d{3})/", "$1-$2", $cep);
+    }
+
     public static function formatValueBR($value): string
     {
         return "R$ " . number_format($value, 2, ',', '.');
