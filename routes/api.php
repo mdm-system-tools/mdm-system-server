@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\{AssociadoController,
+    AuthController,
     ChamadaController,
     GrupoController,
     LocalController,
@@ -11,7 +12,10 @@ use App\Http\Controllers\Api\v1\{AssociadoController,
 };
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->group(function () {
+Route::post('v1/register', [AuthController::class, 'register'])->name('api.auth.register');
+Route::post('v1/login', [AuthController::class, 'login'])->name('api.auth.login');
+
+Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
 
     $missingModel = fn($label) => fn() => response()->json(['message' => "$label não encontrado."], 404);
 
