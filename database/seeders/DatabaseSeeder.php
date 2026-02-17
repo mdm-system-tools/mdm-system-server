@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call([
-            AssociadoSeeder::class
+            AssociadoSeeder::class,
+            TokenSeeder::class,
         ]);
     }
 }
