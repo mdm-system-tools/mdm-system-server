@@ -23,20 +23,44 @@ class UpdateLocalRequest extends FormRequest
     {
         return [
             'nome' => [
+                'required',
                 'string',
                 'max:255'
             ],
-            'endereco' => [
+            'cep' => [
+                'required',
+                'string',
+//                'formato_cep',
+            ],
+            'logradouro' => [
+                'required',
                 'string',
                 'max:255'
+            ],
+            'bairro' => [
+                'required',
+                'string',
+                'max:100'
+            ],
+            'cidade' => [
+                'required',
+                'string',
+                'max:100'
+            ],
+            'estado' => [
+                'required',
+                'string',
+                'max:100'
             ],
             'regiao' => [
+                'required',
                 'string',
                 'max:100'
             ],
             'tipo' => [
+                'required',
                 'string',
-                'in:externo,interno'
+                'in:Interno,Externo'
             ],
         ];
     }

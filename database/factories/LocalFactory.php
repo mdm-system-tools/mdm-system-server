@@ -17,11 +17,22 @@ class LocalFactory extends Factory
      */
     public function definition(): array
     {
+        $bairros = [
+            'Centro', 'Jardim América', 'Vila Nova', 'Bela Vista',
+            'Santo Antônio', 'Industrial', 'Parque das Nações',
+            'Santa Terezinha', 'São Cristóvão', 'Planalto',
+            'Alvorada', 'Primavera', 'Liberdade', 'Boa Vista'
+        ];
+
         return [
-            'nome'     => $this->faker->name(),
-            'endereco' => $this->faker->address(),
-            'regiao'   => $this->faker->randomElement(['Norte', 'Sul', 'Leste', 'Oeste', 'Centro-Oeste']),
-            'tipo'     => $this->faker->randomElement(['externo', 'interno']),
+            'nome'       => $this->faker->company(),
+            'cep'        => $this->faker->postcode(),
+            'logradouro' => $this->faker->streetName() . ', ' . $this->faker->buildingNumber(),
+            'bairro'     => $this->faker->randomElement($bairros),
+            'cidade'     => $this->faker->city(),
+            'estado'     => $this->faker->country(),
+            'regiao'     => $this->faker->randomElement(['Norte', 'Sul', 'Leste', 'Oeste', 'Centro-Oeste']),
+            'tipo'       => $this->faker->randomElement(['externo', 'interno']),
         ];
     }
 }

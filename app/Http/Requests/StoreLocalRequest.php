@@ -27,10 +27,30 @@ class StoreLocalRequest extends FormRequest
                 'string',
                 'max:255'
             ],
-            'endereco' => [
+            'cep' => [
+                'required',
+                'string',
+//                'formato_cep',
+            ],
+            'logradouro' => [
                 'required',
                 'string',
                 'max:255'
+            ],
+            'bairro' => [
+                'required',
+                'string',
+                'max:100'
+            ],
+            'cidade' => [
+                'required',
+                'string',
+                'max:100'
+            ],
+            'estado' => [
+                'required',
+                'string',
+                'max:100'
             ],
             'regiao' => [
                 'required',
@@ -40,7 +60,7 @@ class StoreLocalRequest extends FormRequest
             'tipo' => [
                 'required',
                 'string',
-                'in:externo,interno'
+                'in:Interno,Externo'
             ],
         ];
     }

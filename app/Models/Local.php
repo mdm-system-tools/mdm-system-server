@@ -12,7 +12,11 @@ class Local extends Model
 
     protected $fillable = [
         'nome',
-        'endereco',
+        "cep",
+        "logradouro",
+        "bairro",
+        "cidade",
+        "estado",
         'regiao',
         'tipo' // externo ou interno
     ];
