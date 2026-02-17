@@ -47,8 +47,7 @@ Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
 
     // --- REUNIOES ---
     Route::apiResource('reunioes', ReuniaoController::class)
-        ->missing($missingModel('Reunião'))
-        ->parameters(['reunioes' => 'reuniao']); // ??
+        ->missing($missingModel('Reunião'));
 
     // --- LOCALS ---
     Route::apiResource('locals', LocalController::class)
