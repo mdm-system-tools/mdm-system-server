@@ -4,7 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Chamada extends Model
 {
@@ -18,9 +21,9 @@ class Chamada extends Model
         "justificativa"
     ];
 
-    function associados(): HasMany
+    function associado(): BelongsTo
     {
-        return $this->hasMany(Associado::class);
+        return $this->belongsTo(Associado::class, 'numero_inscricao', 'numero_inscricao');
     }
 
     //TODO Adiciona modelo representante
@@ -29,8 +32,8 @@ class Chamada extends Model
 //        return $this->belongsTo(Representante::class);
 //    }
 
-    function reuniaos(): HasMany
+    function reuniao(): BelongsTo
     {
-        return $this->hasMany(Associado::class);
+        return $this->belongsTo(Reuniao::class);
     }
 }

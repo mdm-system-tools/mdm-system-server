@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Reuniao extends Model
 {
@@ -26,5 +27,9 @@ class Reuniao extends Model
     function local(): BelongsTo
     {
         return $this->belongsTo(Local::class);
+    }
+    function chamada(): HasMany
+    {
+        return $this->hasMany(Chamada::class);
     }
 }

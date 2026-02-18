@@ -17,7 +17,7 @@ class ChamadaController extends Controller
      */
     public function index()
     {
-        return ChamadaResource::collection(Chamada::all());
+        return ChamadaResource::collection(Chamada::with(["reuniao", "associado"])->get());
     }
 
     /**

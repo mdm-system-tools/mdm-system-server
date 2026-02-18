@@ -17,8 +17,15 @@ class ChamadaResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "reuniao_id" => $this->reuniao_id,
-            "numero_inscricao" => Formatador::formatNumInscricao($this->numero_inscricao),
+            "reuniao" => $this->reuniao ? [
+                "data_marcada" => $this->reuniao->data_marcada,
+                "projeto" => $this->reuniao->projeto->nome ?? "sem projeto",
+                "grupo" => Formatador::formatDateToHoursMinutes($this->associado->grupo->horario) ?? "sem grupo",
+            ] : "reuniao não encontrado",
+            "associado" => $this->associado ? [
+                "nome" => $this->associado->nome,
+                "numero_inscricao" => Formatador::formatNumInscricao($this->numero_inscricao),
+            ] : "associado não encontrado",
             "presenca" => $this->presenca ? "presente" : "faltou",
             "representante" => $this->representante ? "presente" : "faltou",
             "justificativa" => $this->justificativa ?? "sem justificativa",

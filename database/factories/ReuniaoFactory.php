@@ -26,8 +26,8 @@ class ReuniaoFactory extends Factory
 
         return [
             'projeto_id'     => $projeto->id,
-            'local_id'       => Local::inRandomOrder()->first(),
-            'data_marcada'   => $this->faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
+            'local_id'       => Local::inRandomOrder()->first()->id,
+            'data_marcada'   => $this->faker->dateTimeBetween('now', '+1 month')->format('d/m/y'),
 
             'horario_inicio' => $inicio ? $inicio->format('H:i') : '08:00',
             'horario_fim'    => $fim ? $fim->format('H:i') : '17:00',

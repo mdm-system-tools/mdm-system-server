@@ -16,15 +16,13 @@ class ReuniaoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'             => $this->id,
-
-            'local'          => $this->local?->endereco,
-            'projeto'        => $this->projeto?->nome,
-
+            'id' => $this->id,
+            'local' => $this->local ? "{$this->local->logradouro}, {$this->local->bairro} - {$this->local->cidade}/{$this->local->estado}"
+                : "endereço não encontrado",
+            'projeto' => $this->projeto->nome,
             'data_marcada'   => $this->data_marcada,
             'horario_inicio' => Formatador::formatDateToHoursMinutes($this->horario_inicio),
             'horario_fim'    => Formatador::formatDateToHoursMinutes($this->horario_fim),
-
             'periodo'        => Formatador::formatDateToHoursMinutes($this->horario_inicio) .
                 ' às ' .
                 Formatador::formatDateToHoursMinutes($this->horario_fim),
