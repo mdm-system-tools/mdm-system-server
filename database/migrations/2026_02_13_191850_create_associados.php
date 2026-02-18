@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('estado_civil', 20);
             $table->decimal('renda_familiar', 10)->nullable();
 
-            $table->char('CPF', 11)->unique();
-            $table->char('RG', 9)->unique()->nullable();
-            $table->char('NIS', 11)->unique()->nullable();
+            $table->char('cpf', 11)->unique();
+            $table->char('rg', 9)->unique()->nullable();
+            $table->char('nis', 11)->unique()->nullable();
             $table->char('cras', 11)->unique()->nullable();
             $table->string('email', 100)->unique()->nullable();
 
