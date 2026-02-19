@@ -18,9 +18,13 @@ class ProjetoResource extends JsonResource
         return [
             "id" => $this->id,
             "grupos" =>$this->grupos->isNotEmpty() ? [
-                "horario" => $this->grupos->map(function ($grupo) {
-                    return Carbon::parse($grupo->horario)->format('H:i');
-                }),
+                "horario" => $this->grupos
+                    ->sortBy('horario')
+                    ->map(function ($grupo) {
+                        return Carbon::parse($grupo->horario)->format('H:i');
+                    })
+                    ->values()
+                    ->all(),
             ] : null,
             "nome" => $this->nome,
             "regiao" => $this->regiao,
