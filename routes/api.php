@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Reuniao;
 use App\Http\Controllers\Api\v1\{AssociadoController,
     AuthController,
     CepApiClientController,
@@ -89,6 +90,11 @@ Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
 
         Route::get("associados", function () {
             $count = Associado::where("status", true)->count();
+            return response()->json(["total" => $count], Response::HTTP_OK);
+        });
+
+        Route::get("reunioes", function () {
+            $count = Reuniao::count();
             return response()->json(["total" => $count], Response::HTTP_OK);
         });
     });
