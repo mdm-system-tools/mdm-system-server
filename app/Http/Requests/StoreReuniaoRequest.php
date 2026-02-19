@@ -34,15 +34,6 @@ class StoreReuniaoRequest extends FormRequest
                 'required',
                 'date_format:d/m/Y'
             ],
-            'horario_inicio' => [
-                'required',
-                'date_format:H:i'
-            ],
-            'horario_fim' => [
-                'required',
-                'date_format:H:i',
-                'after:horario_inicio'
-            ],
         ];
     }
 }

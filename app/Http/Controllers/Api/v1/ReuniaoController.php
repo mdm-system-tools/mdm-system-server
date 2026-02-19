@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReuniaoRequest;
 use App\Http\Requests\UpdateReuniaoRequest;
 use App\Http\Resources\ReuniaoResource;
+use App\Models\Projeto;
 use App\Models\Reuniao;
 use Exception;
 
@@ -25,7 +26,22 @@ class ReuniaoController extends Controller
     public function store(StoreReuniaoRequest $request)
     {
         try {
-            $reuniao = Reuniao::create($request->validated());
+            $valid = $request->validated();
+
+            $projeto = Projeto::with(['grupos' => function ($query) {
+                $query->orderBy('horario', 'asc');
+            }])->findOrFail($valid["projeto_id"]);
+
+            $horarioInicio = $projeto->grupos->first()?->horario;
+            $horarioFim = $projeto->grupos->last()?->horario;
+
+            $reuniao = Reuniao::create([
+                "local_id" => $valid["local_id"],
+                "projeto_id" => $valid["projeto_id"],
+                "data_marcada" => $valid["data_marcada"],
+                "horario_inicio" => $horarioInicio,
+                "horario_fim" => $horarioFim,
+            ]);
             return response()->json(new ReuniaoResource($reuniao), 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);
@@ -43,10 +59,10 @@ class ReuniaoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateReuniaoRequest $request, Reuniao $reuniao)
+    public function update(UpdateReuniaoRequest $valid, Reuniao $reuniao)
     {
         try {
-            if ($reuniao->update($request->validated())) {
+            if ($reuniao->update($valid->validated())) {
                 return response()->json(new ReuniaoResource($reuniao));
             }
         } catch (Exception $e) {
