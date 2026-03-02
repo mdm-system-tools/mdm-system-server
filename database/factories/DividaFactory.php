@@ -6,9 +6,9 @@ use App\Models\Projeto;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Projeto>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Divida>
  */
-class ProjetoFactory extends Factory
+class DividaFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +18,9 @@ class ProjetoFactory extends Factory
     public function definition(): array
     {
         return [
-            'valor' => $this->faker->randomFloat(2, 100, 999),
-            'nome' => $this->faker->jobTitle,
-            'regiao' => $this->faker->lexify('Regiao ???'),
-            "concluido" => $this->faker->boolean(),
+            'projeto_id' => Projeto::inRandomOrder()->first()->id,
+            'valor' => $this->faker->randomFloat(2, 100, 1000),
+            'data_divida' => $this->faker->date(),
         ];
     }
 }

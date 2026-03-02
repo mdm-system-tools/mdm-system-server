@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dependentes', function (Blueprint $table) {
+        Schema::create('dividas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("associado_id")->constrained();
-            $table->string("nome_completo", 100);
-            $table->string("cpf", 11)->unique();
-            $table->string("rg", 11)->unique();
-            $table->string("certidao", 20)->nullable();
+            $table->foreignId("projeto_id")->constrained();
+            $table->decimal("valor",10);
+            $table->date("data_divida");
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dependentes');
+        Schema::dropIfExists('dividas');
     }
 };

@@ -18,7 +18,7 @@ class TokenSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => 'dev@teste.com'],
             [
-                'name' => 'Desenvolvedor Freelance',
+                'name' => 'Dev',
                 'password' => Hash::make('password'),
             ]
         );

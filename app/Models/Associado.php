@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,21 +12,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Associado extends Model
 {
     use HasFactory;
-
-    protected $table = 'associados';
-
-    protected $primaryKey = 'numero_inscricao';
-
-    public $incrementing = false;
-
-    protected $keyType = 'int';
-
     /**
      * Atributos que podem ser preenchidos em massa.
      */
     protected $fillable = [
+        'id',
         'numero_inscricao',
-        'nome',
+        'nome_completo',
+        'telefone',
+        'celular',
         'rg',
         'cpf',
         'estado_civil',
@@ -47,6 +42,13 @@ class Associado extends Model
         'data_inscricao' => 'date:d/m/Y',
     ];
 
+    protected function phone(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => preg_replace('/[^0-9+]/', '', $value),
+        );
+    }
+
     function grupo(): BelongsTo
     {
         return $this->belongsTo(Grupo::class);
@@ -64,22 +66,22 @@ class Associado extends Model
 
     function dependentes(): HasMany
     {
-        return $this->hasMany(Dependente::class,
-            'numero_inscricao');
+        return $this->hasMany(Dependente::class
+        );
     }
 
     function endereco(): HasOne
     {
-        return $this->hasOne(Endereco::class, 'numero_inscricao');
+        return $this->hasOne(Endereco::class);
     }
 
     function tituloEleitor(): HasOne
     {
-        return $this->hasOne(TituloEleitor::class, 'numero_inscricao');
+        return $this->hasOne(TituloEleitor::class);
     }
 
     function representante(): HasOne
     {
-        return $this->hasOne(Representante::class, 'numero_inscricao');
+        return $this->hasOne(Representante::class);
     }
 }

@@ -18,8 +18,8 @@ class PagamentoResource extends JsonResource
         return [
             "id" => $this->id,
             "numero_inscricao" => Formatador::formatNumInscricao($this->numero_inscricao),
-            "valor" => Formatador::formatValueBR($this->valor),
-            "mes_referencia" => $this->mes_referencia,
+            "valor" => Formatador::formatValueBR($this->divida->valor),
+            "mes_referencia" => $this->divida->data_divida,
         ];
     }
 }

@@ -5,13 +5,13 @@ use App\Http\Controllers\Api\v1\{AssociadoController,
     AuthController,
     CepApiClientController,
     ChamadaController,
+    DividaController,
     GrupoController,
     LocalController,
     PagamentoController,
     ProjetoController,
     RepresentanteController,
-    ReuniaoController
-};
+    ReuniaoController};
 use App\Models\Associado;
 use App\Models\Grupo;
 use App\Models\Projeto;
@@ -27,6 +27,9 @@ Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
 
     // --- ASSOCIADOS ---
     Route::apiResource('associados', AssociadoController::class)
+        ->missing($missingModel('Associado'));
+
+    Route::get('/associados/{associado}/dividas', [AssociadoController::class, 'dividas'])
         ->missing($missingModel('Associado'));
 
 
@@ -73,6 +76,10 @@ Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
     // --- REPRESENTANTE ---
     Route::apiResource('representantes', RepresentanteController::class)
         ->missing($missingModel('Representante'));
+
+    // --- DIVIDA ---
+    Route::apiResource('dividas', DividaController::class)
+        ->missing($missingModel('dividas'));
 
     // --- CEP ---
     Route::post("/cep", [CepApiClientController::class, 'searchCep']);

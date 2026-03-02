@@ -16,30 +16,38 @@ class AssociadoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "numero_inscricao" => Formatador::formatNumInscricao($this->numero_inscricao),
-            "nome"            => $this->nome,
+            'numero_inscricao' => $this->numero_inscricao,
+            "numero_inscricao_formatado" => Formatador::formatNumInscricao($this->numero_inscricao),
+            "nome_completo" => $this->nome_completo,
             "estado_civil"     => $this->estado_civil,
             "data_nascimento"  => Formatador::formatDateToDayMonthYear($this->data_nascimento),
+            "genero"         => $this->genero,
             "email"           => $this->email,
-            "cpf"             => Formatador::formatCPF($this->CPF),
-            "rg"              => Formatador::formatRG($this->RG),
-            "nis"             => Formatador::formatNis($this->NIS),
+            "cpf" => Formatador::formatCPF($this->cpf),
+            "rg" => Formatador::formatRG($this->rg),
+            "nis" => Formatador::formatNis($this->nis),
             "cras"            => Formatador::formatCras($this->cras),
             "renda_familiar"   => Formatador::formatValueBR($this->renda_familiar),
             "data_inscricao"   => Formatador::formatDateToDayMonthYear($this->data_inscricao),
             "status"          => $this->status ? "Ativo" : "Inativo",
-            "dependente"      => $this->dependente ? [
-                "id"   => $this->dependente->id,
-                "nome" => $this->dependente->nome
-            ] : null,
-            "grupo"           => $this->grupo ? [
-                "horario" => Formatador::formatDateToHoursMinutes($this->grupo->horario),
-            ] : null,
+            "dependentes" => $this->dependentes->map(function ($dependente) {
+                return [
+                    "nome_completo" => $dependente->nome_completo,
+                    "cpf" => Formatador::formatCPF($dependente->cpf),
+                    "rg" => Formatador::formatRG($dependente->rg),
+                    "certidao" => $dependente->certidao ?: null,
+                ];
+            }),
+            "grupo" => $this->grupo ? Formatador::saudacaoPorHorario($this->grupo->horario) : null,
             "documento_img"    => $this->documento_img,
             "certidao_img"     => $this->certidao_img,
-            "representante"   => $this->representante ? [
-                "nome" => $this->representante->nome,
-                "cpf"  => $this->representante->CPF,
+            "endereco" => $this->endereco ? [
+                "logradouro" => $this->endereco->logradouro,
+                "numero" => $this->endereco->numero,
+                "bairro" => $this->endereco->bairro,
+                "cidade" => $this->endereco->cidade,
+                "estado" => $this->endereco->estado,
+                "cep" => Formatador::formatCEP($this->endereco->cep),
             ] : null,
         ];
     }

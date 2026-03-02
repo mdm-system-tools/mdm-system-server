@@ -19,6 +19,11 @@ class Pagamento extends Model
 
     function associado(): BelongsTo
     {
-        return $this->belongsTo(Associado::class);
+        return $this->belongsTo(Associado::class, );
+    }
+
+    function divida(): BelongsTo
+    {
+        return $this->belongsTo(Divida::class);
     }
 }

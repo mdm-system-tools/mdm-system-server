@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreAssociadoRequest extends FormRequest
 {
@@ -28,6 +27,7 @@ class StoreAssociadoRequest extends FormRequest
             'rg' => 'string|size:9|unique:associados,RG',
             'cpf' => 'required|string|size:11|unique:associados,CPF',
             'estado_civil' => 'required|string|max:20',
+            'telefone' => ['phone:BR,US', 'fixed_line,mobile'],
 
             'nis' => 'string|size:11|unique:associados,NIS',
             'cras' => 'string|size:11',

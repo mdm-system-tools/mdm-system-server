@@ -21,7 +21,7 @@ class ChamadaFactory extends Factory
         $associado = Associado::inRandomOrder()->first();
 
         return [
-            'numero_inscricao' => $associado->numero_inscricao,
+            'associado_id' => $associado->id,
             'reuniao_id' => Reuniao::inRandomOrder()->first()->id,
             'representante' => $associado->representante() && $this->faker->boolean(),
             'presenca' => $this->faker->boolean(),

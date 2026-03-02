@@ -5,6 +5,20 @@ use Illuminate\Support\Carbon;
 
 class Formatador
 {
+    public  static function saudacaoPorHorario($horario = null)
+    {
+        $hora = $horario ? Carbon::parse($horario) : Carbon::now();
+        $h = $hora->format('H:i');
+
+        if ($h >= '00:00' && $h < '12:00') {
+            return "Manhã 09:00";
+        } elseif ($h >= '12:00' && $h < '18:00') {
+            return "Tarde 13:00";
+        } else {
+            return "Noite 18:00";
+        }
+    }
+
     public static function formatNumInscricao($num_inscricao): string
     {
         return substr_replace($num_inscricao, '-', -2, 0);

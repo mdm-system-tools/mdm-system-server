@@ -12,16 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('enderecos', function (Blueprint $table) {
-            $table->unsignedSmallInteger('id');
-            $table->unsignedSmallInteger('numero_inscricao');
+            $table->id();
+            $table->foreignId("associado_id")->constrained();
 
-            $table->primary(['id', 'numero_inscricao']);
-
-            $table->char("CEP", 9);
-            $table->string("rua", 150);
-            $table->string("bairro", 100);
+            $table->char("cep", 9);
+            $table->string("logradouro", 150);
             $table->string("numero", 10);
-            $table->string("municipio", 20);
+            $table->string("bairro", 100);
+            $table->string("cidade", 100);
+            $table->string("estado", 20);
 
             $table->timestamps();
         });

@@ -11,9 +11,10 @@ class Dependente extends Model
     use HasFactory;
 
     protected $fillable = [
-        "numero_inscricao",
-        "CPF",
-        "RG",
+        "associado_id",
+        'nome_completo',
+        "cpf",
+        "rg",
         "certidao",
     ];
 

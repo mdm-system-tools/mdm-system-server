@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Associado;
+use App\Models\Divida;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,9 +19,10 @@ class PagamentoFactory extends Factory
     public function definition(): array
     {
         return [
-            'numero_inscricao' => Associado::inRandomOrder()->first()->numero_inscricao,
-            'valor' => $this->faker->randomFloat(2, 10, 500),
-            'mes_referencia' => $this->faker->dateTimeBetween('-1 year', 'now')->format('m/Y'),
+            'associado_id' => Associado::inRandomOrder()->first()->id,
+            'divida_id' => Divida::inRandomOrder()->first()->id,
+            'metodo_pagamento' => $this->faker->randomElement(['cartão de crédito', 'boleto', 'pix']),
+            'data_pagamento' => $this->faker->date(),
             'comprovante' => 'comprovantes/' . $this->faker->uuid() . '.pdf',
         ];
     }

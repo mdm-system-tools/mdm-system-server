@@ -12,11 +12,11 @@ return new class extends Migration {
     {
         Schema::create('pagamentos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("numero_inscricao")->constrained("associados", "numero_inscricao");
 
-            $table->decimal('valor', 5, 2);
-            $table->string('mes_referencia', 7);
-
+            $table->foreignId("associado_id")->constrained();
+            $table->foreignId("divida_id")->constrained();
+            $table->date("data_pagamento");
+            $table->string("metodo_pagamento");
             $table->binary("comprovante")->nullable();
 
             $table->timestamps();

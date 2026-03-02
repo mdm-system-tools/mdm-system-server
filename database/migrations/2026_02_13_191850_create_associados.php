@@ -12,11 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('associados', function (Blueprint $table) {
-            $table->unsignedBigInteger('numero_inscricao')->primary();
+            $table->id();
+            $table->unsignedBigInteger('numero_inscricao');
 
-            $table->string('nome', 100);
+            $table->string('nome_completo', 100);
             $table->string('estado_civil', 20);
             $table->decimal('renda_familiar', 10)->nullable();
+            $table->enum('genero', ['M', 'F']);
+            $table->string("telefone", 15)->nullable();
+            $table->string('celular', 20)->nullable();
 
             $table->char('cpf', 11)->unique();
             $table->char('rg', 9)->unique()->nullable();

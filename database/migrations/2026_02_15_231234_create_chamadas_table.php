@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('chamadas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("numero_inscricao")->constrained('associados', "numero_inscricao");
+            $table->foreignId("associado_id")->constrained();
             $table->foreignId("reuniao_id");
             $table->boolean('representante')->nullable();
             $table->boolean('presenca');

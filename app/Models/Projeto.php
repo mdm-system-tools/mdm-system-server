@@ -27,4 +27,9 @@ class Projeto extends Model
     {
         return $this->hasMany(Reuniao::class);
     }
+
+    function dividas():HasMany
+    {
+        return $this->hasMany(Divida::class);
+    }
 }

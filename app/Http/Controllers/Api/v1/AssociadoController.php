@@ -16,7 +16,13 @@ class AssociadoController extends Controller
      */
     public function index()
     {
-        return AssociadoResource::collection(Associado::with(["dependentes", "grupo", "representante"])->get());
+        return AssociadoResource::collection(Associado::with(["dependentes", "grupo", "endereco"])->get());
+    }
+
+    public function dividas(Associado $associado)
+    {
+        $projeto = $associado->pagamentos;
+        return response()->json($projeto);
     }
 
     /**
