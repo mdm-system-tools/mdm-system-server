@@ -24,10 +24,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            TokenSeeder::class,
-        ]);
-
         Projeto::factory()->count(2)->create();
         Grupo::factory()->count(6)->create();
         Associado::factory()->count(20)->create();
@@ -37,6 +33,10 @@ class DatabaseSeeder extends Seeder
         Reuniao::factory()->count(10)->create();
         Chamada::factory()->count(10)->create();
         Divida::factory()->count(10)->create();
-        Pagamento::factory()->count(20)->create();
+        $this->call([
+            TokenSeeder::class,
+        ]);
+
+//        Pagamento::factory()->count(20)->create();
     }
 }

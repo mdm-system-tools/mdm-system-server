@@ -15,8 +15,9 @@ return new class extends Migration {
 
             $table->foreignId("associado_id")->constrained();
             $table->foreignId("divida_id")->constrained();
-            $table->date("data_pagamento");
-            $table->string("metodo_pagamento");
+            $table->date("data_pagamento")->nullable();
+            $table->string("metodo_pagamento")->nullable();
+            $table->enum('status', ['Pendente', 'Pago', 'Atrasado'])->default('Pendente');
             $table->binary("comprovante")->nullable();
 
             $table->timestamps();

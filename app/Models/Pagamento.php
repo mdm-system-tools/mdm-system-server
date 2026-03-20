@@ -12,6 +12,7 @@ class Pagamento extends Model
 
     protected $fillable = [
         "numero_inscricao",
+        "divida_id",
         "valor",
         "mes_referencia",
         "comprovante",
@@ -19,7 +20,7 @@ class Pagamento extends Model
 
     function associado(): BelongsTo
     {
-        return $this->belongsTo(Associado::class, );
+        return $this->belongsTo(Associado::class);
     }
 
     function divida(): BelongsTo

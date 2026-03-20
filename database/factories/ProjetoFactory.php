@@ -18,7 +18,7 @@ class ProjetoFactory extends Factory
     public function definition(): array
     {
         return [
-            'valor' => $this->faker->randomFloat(2, 100, 999),
+            'valor' => $this->faker->randomFloat(2, 0, 1000),
             'nome' => $this->faker->jobTitle,
             'regiao' => $this->faker->lexify('Regiao ???'),
             "concluido" => $this->faker->boolean(),

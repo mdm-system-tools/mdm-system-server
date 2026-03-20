@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Divida;
+use App\Observers\DividaObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Divida::observe(DividaObserver::class);
     }
 }

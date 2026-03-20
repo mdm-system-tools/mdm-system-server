@@ -21,6 +21,7 @@ class PagamentoFactory extends Factory
         return [
             'associado_id' => Associado::inRandomOrder()->first()->id,
             'divida_id' => Divida::inRandomOrder()->first()->id,
+            'status' => 'Pago',
             'metodo_pagamento' => $this->faker->randomElement(['cartão de crédito', 'boleto', 'pix']),
             'data_pagamento' => $this->faker->date(),
             'comprovante' => 'comprovantes/' . $this->faker->uuid() . '.pdf',

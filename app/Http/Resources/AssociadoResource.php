@@ -16,8 +16,8 @@ class AssociadoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'numero_inscricao' => $this->numero_inscricao,
-            "numero_inscricao_formatado" => Formatador::formatNumInscricao($this->numero_inscricao),
+            'id' => $this->id,
+            "numero_inscricao" => Formatador::formatNumInscricao($this->numero_inscricao),
             "nome_completo" => $this->nome_completo,
             "estado_civil"     => $this->estado_civil,
             "data_nascimento"  => Formatador::formatDateToDayMonthYear($this->data_nascimento),
