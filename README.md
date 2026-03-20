@@ -9,9 +9,9 @@ Este repositorio contem o backend do MDM.
 
 `http://localhost:8000/docs/api`
 
-Se precisar executar manualmente, use um comando no formato abaixo e ajuste a imagem:
+Se precisar executar a imagem localmente, siga os passos abaixo:
 
 ```bash
-docker run --rm -p 8000:8000 ghcr.io/<org>/<imagem>:<tag>
+docker run -p 8000:8000 --name mdm-server ghcr.io/mdm-system-tools/mdm-system-server
 ```
 
