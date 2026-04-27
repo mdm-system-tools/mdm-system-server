@@ -1,8 +1,11 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { BookOpen, FolderGit2, LayoutGrid, Phone, History, FileText, Users2 } from 'lucide-react';
+
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
+import { NavQuickActions } from '@/components/nav-quick-actions';
+import type { QuickActionItem } from '@/components/nav-quick-actions';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -13,7 +16,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { cadastros, dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -21,6 +24,42 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+];
+
+// Quick action functions
+const getChamadas = () => {
+    console.log('buscando chamadas');
+};
+
+const getHistoricoChamadas = () => {
+    console.log('buscando histórico de chamadas');
+};
+
+const getFuncionarios = () => {
+    console.log('buscando funcionários');
+};
+
+const quickActionItems: QuickActionItem[] = [
+    {
+        title: 'Chamada',
+        icon: Phone,
+        onClick: getChamadas,
+    },
+    {
+        title: 'Histórico de Chamada',
+        icon: History,
+        onClick: getHistoricoChamadas,
+    },
+    {
+        title: 'Lista de Cadastros',
+        icon: FileText,
+        href: cadastros().url,
+    },
+    {
+        title: 'Gerenciamento de Funcionários',
+        icon: Users2,
+        onClick: getFuncionarios,
     },
 ];
 
@@ -54,6 +93,7 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+                <NavQuickActions items={quickActionItems} />
             </SidebarContent>
 
             <SidebarFooter>

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRepresentanteRequest;
 use App\Http\Requests\UpdateRepresentanteRequest;
 use App\Http\Resources\RepresentanteResource;

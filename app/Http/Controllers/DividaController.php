@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Divida;
 use Illuminate\Http\Request;
 

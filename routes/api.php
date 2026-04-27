@@ -1,20 +1,19 @@
 <?php
 
-use App\Models\Reuniao;
-use App\Http\Controllers\Api\v1\{AssociadoController,
-    AuthController,
-    CepApiClientController,
-    ChamadaController,
-    DividaController,
-    GrupoController,
-    LocalController,
-    PagamentoController,
-    ProjetoController,
-    RepresentanteController,
-    ReuniaoController};
+use App\Http\Controllers\Api\v1\{AuthController, ChamadaController};
+use App\Http\Controllers\AssociadoController;
+use App\Http\Controllers\CepApiClientController;
+use App\Http\Controllers\DividaController;
+use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\LocalController;
+use App\Http\Controllers\PagamentoController;
+use App\Http\Controllers\ProjetoController;
+use App\Http\Controllers\RepresentanteController;
+use App\Http\Controllers\ReuniaoController;
 use App\Models\Associado;
 use App\Models\Grupo;
 use App\Models\Projeto;
+use App\Models\Reuniao;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 

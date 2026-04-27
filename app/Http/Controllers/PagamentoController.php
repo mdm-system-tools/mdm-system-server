@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePagamentoRequest;
 use App\Http\Requests\UpdatePagamentoRequest;
 use App\Http\Resources\PagamentoResource;

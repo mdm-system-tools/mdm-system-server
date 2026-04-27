@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreReuniaoRequest;
 use App\Http\Requests\UpdateReuniaoRequest;
 use App\Http\Resources\ReuniaoResource;

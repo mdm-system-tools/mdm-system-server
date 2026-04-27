@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\LocalRequest;
 use App\Http\Requests\StoreLocalRequest;
 use App\Http\Requests\UpdateLocalRequest;
