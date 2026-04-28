@@ -7,7 +7,10 @@ use App\Http\Requests\UpdateProjetoRequest;
 use App\Http\Resources\ProjetoResource;
 use App\Models\Projeto;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+
 use function response;
 
 class ProjetoController extends Controller
@@ -38,17 +41,21 @@ class ProjetoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjetoRequest $request)
+    public function store(StoreProjetoRequest $request): JsonResponse|RedirectResponse
     {
         try {
             if (empty($request->validated())) {
-                return response()->json(["message" => "nenhum dado valido passado, operação ignorada"], ResponseAlias::HTTP_BAD_REQUEST);
+                return response()->json(['message' => 'nenhum dado valido passado, operação ignorada'], ResponseAlias::HTTP_BAD_REQUEST);
             }
             if (Projeto::create($request->validated()) != null) {
-                return response()->json(["message" => "Projeto cadastrado com sucesso!"], ResponseAlias::HTTP_CREATED);
+                if (! request()->expectsJson()) {
+                    return to_route('cadastros')->with('success', 'Projeto cadastrado com sucesso.');
+                }
+
+                return response()->json(['message' => 'Projeto cadastrado com sucesso!'], ResponseAlias::HTTP_CREATED);
             }
         } catch (Exception $e) {
-            return response()->json(["message" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,13 +74,13 @@ class ProjetoController extends Controller
     {
         try {
             if (empty($request->validated())) {
-                return response()->json(["message" => "nenhum dado valido passado, operação ignorada"], ResponseAlias::HTTP_BAD_REQUEST);
+                return response()->json(['message' => 'nenhum dado valido passado, operação ignorada'], ResponseAlias::HTTP_BAD_REQUEST);
             }
             if ($projeto->update($request->validated()) != null) {
-                return response()->json(["message" => "Projeto atualizado com sucesso!"], ResponseAlias::HTTP_OK);
+                return response()->json(['message' => 'Projeto atualizado com sucesso!'], ResponseAlias::HTTP_OK);
             }
         } catch (Exception $e) {
-            return response()->json(["message" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -84,10 +91,10 @@ class ProjetoController extends Controller
     {
         try {
             if ($projeto->delete()) {
-                return response()->json(["message" => "Projeto removido com sucesso!"], ResponseAlias::HTTP_OK);
+                return response()->json(['message' => 'Projeto removido com sucesso!'], ResponseAlias::HTTP_OK);
             }
         } catch (Exception $e) {
-            return response()->json(["message" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -95,13 +102,13 @@ class ProjetoController extends Controller
     {
         try {
             if ($projeto->status != true) {
-                return response()->json(["message" => "projeto já cancelado, operação ignorada"], ResponseAlias::HTTP_BAD_REQUEST);
+                return response()->json(['message' => 'projeto já cancelado, operação ignorada'], ResponseAlias::HTTP_BAD_REQUEST);
             }
-            if ($projeto->update(["status" => false])) {
-                return response()->json(["message" => "Projeto cancelado com sucesso!"], ResponseAlias::HTTP_OK);
+            if ($projeto->update(['status' => false])) {
+                return response()->json(['message' => 'Projeto cancelado com sucesso!'], ResponseAlias::HTTP_OK);
             }
         } catch (Exception $e) {
-            return response()->json(["message" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -109,16 +116,16 @@ class ProjetoController extends Controller
     {
         try {
             if ($projeto->status == false) {
-                return response()->json(["message" => "projeto está cancelado, operação ignorada"], ResponseAlias::HTTP_BAD_REQUEST);
+                return response()->json(['message' => 'projeto está cancelado, operação ignorada'], ResponseAlias::HTTP_BAD_REQUEST);
             }
             if ($projeto->concluido == true) {
-                return response()->json(["message" => "projeto está marcado como concluido, operação ignorada"], ResponseAlias::HTTP_BAD_REQUEST);
+                return response()->json(['message' => 'projeto está marcado como concluido, operação ignorada'], ResponseAlias::HTTP_BAD_REQUEST);
             }
-            if ($projeto->update(["concluido" => true])) {
-                return response()->json(["message" => "Projeto marcado como concluido com sucesso!"], ResponseAlias::HTTP_OK);
+            if ($projeto->update(['concluido' => true])) {
+                return response()->json(['message' => 'Projeto marcado como concluido com sucesso!'], ResponseAlias::HTTP_OK);
             }
         } catch (Exception $e) {
-            return response()->json(["message" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -16,7 +16,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { cadastros, dashboard } from '@/routes';
+import { cadastros, dashboard, historicoChamadas } from '@/routes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -49,7 +49,7 @@ const quickActionItems: QuickActionItem[] = [
     {
         title: 'Histórico de Chamada',
         icon: History,
-        onClick: getHistoricoChamadas,
+        href: historicoChamadas().url,
     },
     {
         title: 'Lista de Cadastros',

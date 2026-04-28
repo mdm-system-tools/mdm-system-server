@@ -1,172 +1,96 @@
-import { Head } from '@inertiajs/react';
-import { ChevronLeft, Clock, Users, Zap } from 'lucide-react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { ChevronLeft } from 'lucide-react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { cadastros, detalhesAssociado } from '@/routes';
 
-interface Associado {
-    id: string;
-    nome: string;
-    email: string;
-    status: 'Ativo' | 'Inativo';
+interface DetalhesGrupoProps {
+    grupo: {
+        id: number;
+        horario: string;
+        projeto_id: number;
+        associados_count: number;
+        projeto: { id: number; nome: string } | null;
+        associados: Array<{
+            id: number;
+            nome_completo: string;
+            email: string | null;
+            status: boolean;
+        }>;
+    };
 }
 
-export default function DetalhesGrupo() {
-    const grupo = {
-        id: '1',
-        nome: 'Grupo Manhã',
-        horario: '09:00',
-        associados: 12,
-        projeto: 'Vila Nova',
-    };
-
-    const associados: Associado[] = [
-        {
-            id: '1',
-            nome: 'João Silva Santos',
-            email: 'joao.silva@gmail.com',
-            status: 'Ativo',
-        },
-        {
-            id: '2',
-            nome: 'Maria da Penha',
-            email: 'maria.penha@gmail.com',
-            status: 'Ativo',
-        },
-        {
-            id: '3',
-            nome: 'Dalva da silva',
-            email: 'dalva.silva@gmail.com',
-            status: 'Inativo',
-        },
-    ];
+export default function DetalhesGrupo({ grupo }: DetalhesGrupoProps) {
+    const [isEditing, setIsEditing] = useState(false);
+    const form = useForm({
+        horario: grupo.horario,
+        projeto_id: grupo.projeto_id,
+    });
 
     return (
         <>
             <Head title="Detalhes do Grupo" />
             <div className="flex flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-6">
-                {/* Header */}
                 <div className="flex items-center gap-3">
-                    <button className="rounded-lg hover:bg-gray-100 p-2 dark:hover:bg-gray-800">
+                    <Link href={cadastros()} className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800">
                         <ChevronLeft className="size-5 text-gray-700 dark:text-gray-300" />
-                    </button>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        Detalhes da Grupo
-                    </h1>
+                    </Link>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Detalhes do Grupo</h1>
                 </div>
 
-                {/* Grupo Info Card */}
                 <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-900">
-                    <div className="mb-6">
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                            {grupo.nome}
-                        </h2>
-                    </div>
-
-                    {/* Stats Cards */}
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
-                            <div className="flex flex-col items-center text-center">
-                                <Clock className="size-6 text-blue-600 dark:text-blue-400 mb-2" />
-                                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Horário
-                                </p>
-                                <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                                    {grupo.horario}
-                                </p>
+                    {!isEditing ? (
+                        <>
+                            <p className="text-lg font-semibold">Grupo #{grupo.id}</p>
+                            <p className="text-sm text-gray-600">Horário: {grupo.horario}</p>
+                            <p className="text-sm text-gray-600">Projeto: {grupo.projeto?.nome ?? 'Sem projeto'}</p>
+                            <p className="text-sm text-gray-600">Associados: {grupo.associados_count}</p>
+                            <Button className="mt-4" variant="outline" onClick={() => setIsEditing(true)}>
+                                Editar
+                            </Button>
+                        </>
+                    ) : (
+                        <form
+                            className="space-y-2"
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                form.patch(`/grupos/${grupo.id}`, {
+                                    onSuccess: () => setIsEditing(false),
+                                });
+                            }}
+                        >
+                            <input className="w-full rounded border px-3 py-2" value={form.data.horario} onChange={(e) => form.setData('horario', e.target.value)} />
+                            <input className="w-full rounded border px-3 py-2" value={String(form.data.projeto_id)} onChange={(e) => form.setData('projeto_id', Number(e.target.value))} />
+                            <div className="flex gap-2">
+                                <Button type="button" variant="outline" className="w-full" onClick={() => setIsEditing(false)}>Cancelar</Button>
+                                <Button type="submit" className="w-full" disabled={form.processing}>Salvar</Button>
                             </div>
-                        </div>
-
-                        <div className="rounded-lg bg-green-50 p-4 dark:bg-green-900/20">
-                            <div className="flex flex-col items-center text-center">
-                                <Users className="size-6 text-green-600 dark:text-green-400 mb-2" />
-                                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Associados
-                                </p>
-                                <p className="text-lg font-bold text-green-600 dark:text-green-400">
-                                    {grupo.associados}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="rounded-lg bg-purple-50 p-4 dark:bg-purple-900/20">
-                            <div className="flex flex-col items-center text-center">
-                                <Zap className="size-6 text-purple-600 dark:text-purple-400 mb-2" />
-                                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                                    Projeto
-                                </p>
-                                <p className="text-sm font-bold text-purple-600 dark:text-purple-400">
-                                    {grupo.projeto}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <Button className="w-full gap-2">
-                        ✏️ Editar
-                    </Button>
+                        </form>
+                    )}
                 </div>
 
-                {/* Associados Section */}
-                <div>
-                    <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
-                        Associados do Grupo
-                    </h3>
-                    <div className="space-y-3">
-                        {associados.map((associado) => (
-                            <div
-                                key={associado.id}
-                                className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900"
-                            >
-                                <div className="flex items-center gap-3 flex-1">
-                                    <div className="flex size-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                                        <svg
-                                            className="size-5"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth={2}
-                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                            />
-                                        </svg>
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-medium text-gray-900 dark:text-white">
-                                            {associado.nome}
-                                        </p>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                            {associado.email}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-3">
-                                    <span
-                                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                                            associado.status === 'Ativo'
-                                                ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-                                                : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
-                                        }`}
-                                    >
-                                        {associado.status}
-                                    </span>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="text-xs"
-                                    >
-                                        Ver Perfil
-                                    </Button>
-                                </div>
+                <div className="space-y-3">
+                    {grupo.associados.map((associado) => (
+                        <div key={associado.id} className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
+                            <div>
+                                <p className="font-medium">{associado.nome_completo}</p>
+                                <p className="text-sm text-gray-600">{associado.email ?? '-'}</p>
                             </div>
-                        ))}
-                    </div>
+                            <Link href={detalhesAssociado({ associado: associado.id }).url}>
+                                <Button variant="outline" size="sm">Ver perfil</Button>
+                            </Link>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>
     );
 }
 
+DetalhesGrupo.layout = {
+    breadcrumbs: [
+        { title: 'Cadastros', href: cadastros() },
+        { title: 'Detalhes do Grupo', href: '' },
+    ],
+};

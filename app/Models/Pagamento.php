@@ -11,19 +11,20 @@ class Pagamento extends Model
     use HasFactory;
 
     protected $fillable = [
-        "numero_inscricao",
-        "divida_id",
-        "valor",
-        "mes_referencia",
-        "comprovante",
+        'associado_id',
+        'divida_id',
+        'data_pagamento',
+        'metodo_pagamento',
+        'status',
+        'comprovante',
     ];
 
-    function associado(): BelongsTo
+    public function associado(): BelongsTo
     {
         return $this->belongsTo(Associado::class);
     }
 
-    function divida(): BelongsTo
+    public function divida(): BelongsTo
     {
         return $this->belongsTo(Divida::class);
     }

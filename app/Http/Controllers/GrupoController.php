@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateGrupoRequest;
 use App\Http\Resources\GrupoResource;
 use App\Models\Grupo;
 use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class GrupoController extends Controller
@@ -22,14 +24,18 @@ class GrupoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGrupoRequest $request)
+    public function store(StoreGrupoRequest $request): JsonResponse|RedirectResponse
     {
         try {
             if (Grupo::create($request->validated()) != null) {
-                return response()->json(["message" => "criando com sucesso"], ResponseAlias::HTTP_CREATED);
+                if (! request()->expectsJson()) {
+                    return to_route('cadastros')->with('success', 'Grupo criado com sucesso.');
+                }
+
+                return response()->json(['message' => 'criando com sucesso'], ResponseAlias::HTTP_CREATED);
             }
         } catch (Exception $e) {
-            return response()->json(['message' => "ocorreu um erro", 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => 'ocorreu um erro', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -51,7 +57,7 @@ class GrupoController extends Controller
                 return response()->json(['message' => 'atualizado com sucesso'], ResponseAlias::HTTP_OK);
             }
         } catch (Exception $e) {
-            return response()->json(['message' => "ocorreu um erro", 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => 'ocorreu um erro', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -63,7 +69,7 @@ class GrupoController extends Controller
         try {
             return response()->json(['message' => $grupo->delete()], ResponseAlias::HTTP_OK);
         } catch (Exception $e) {
-            return response()->json(['message' => "ocorreu um erro", 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => 'ocorreu um erro', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

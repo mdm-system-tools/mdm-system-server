@@ -1,9 +1,9 @@
-import { Head } from '@inertiajs/react';
-import { Users, CheckCircle, Calendar, Users2 } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { ChevronLeft, Users, CheckCircle, Calendar, Users2 } from 'lucide-react';
 import { useState } from 'react';
 
 import CreateMeetingModal from '@/components/create-meeting-modal';
-import { dashboard } from '@/routes';
+import { dashboard, home } from '@/routes';
 
 // Placeholder functions para chamadas ao backend
 const getGrupos = () => {
@@ -35,9 +35,18 @@ export default function Dashboard() {
             <Head title="Dashboard" />
             <div className="flex flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-6">
                 {/* Header Section */}
-                <div className="space-y-2">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Menu Principal</h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Sistema de gerenciamento e controle de projetos</p>
+                <div className="space-y-4">
+                    <Link
+                        href={home()}
+                        className="inline-flex items-center gap-2 rounded-lg text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                    >
+                        <ChevronLeft className="size-4" />
+                        Voltar
+                    </Link>
+                    <div className="space-y-2">
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Menu Principal</h1>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Sistema de gerenciamento e controle de projetos</p>
+                    </div>
                 </div>
 
                 {/* Main Cards Grid - 3 columns */}
@@ -120,6 +129,10 @@ export default function Dashboard() {
 
 Dashboard.layout = {
     breadcrumbs: [
+        {
+            title: 'Início',
+            href: home(),
+        },
         {
             title: 'Dashboard',
             href: dashboard(),

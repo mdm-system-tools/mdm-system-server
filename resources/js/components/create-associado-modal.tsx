@@ -1,5 +1,6 @@
 'use client';
 
+import { router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,15 +23,15 @@ import {
 } from '@/components/ui/select';
 
 interface FormData {
-    nomeCompleto: string;
+    numero_inscricao: string;
+    nome_completo: string;
     cpf: string;
     rg: string;
-    dataNascimento: string;
-    genero: string;
-    grupo: string;
+    estado_civil: string;
+    data_nascimento: string;
     email: string;
     celular: string;
-    telefoneFIxo: string;
+    telefone?: string;
     cep: string;
     rua: string;
     numero: string;
@@ -54,15 +55,15 @@ function CreateAssociadoModal({
 }: CreateAssociadoModalProps) {
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<FormData>({
-        nomeCompleto: '',
+        numero_inscricao: '',
+        nome_completo: '',
         cpf: '',
         rg: '',
-        dataNascimento: '',
-        genero: '',
-        grupo: '',
+        estado_civil: '',
+        data_nascimento: '',
         email: '',
         celular: '',
-        telefoneFIxo: '',
+        telefone: '',
         cep: '',
         rua: '',
         numero: '',
@@ -73,12 +74,27 @@ function CreateAssociadoModal({
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const estadosCivis = [
+        'Solteiro(a)',
+        'Casado(a)',
+        'Divorciado(a)',
+        'Viúvo(a)',
+        'Separado(a)',
+    ];
 
     const validateStep1 = (): boolean => {
         const newErrors: FormErrors = {};
 
-        if (!formData.nomeCompleto.trim()) {
-            newErrors.nomeCompleto = 'Nome completo é obrigatório';
+        if (!formData.numero_inscricao.trim()) {
+            newErrors.numero_inscricao = 'Número de inscrição é obrigatório';
+        } else if (!/^\d+$/.test(formData.numero_inscricao)) {
+            newErrors.numero_inscricao = 'Deve conter apenas números';
+        }
+
+        if (!formData.nome_completo.trim()) {
+            newErrors.nome_completo = 'Nome completo é obrigatório';
         }
 
         if (!formData.cpf.trim()) {
@@ -87,16 +103,12 @@ function CreateAssociadoModal({
             newErrors.cpf = 'CPF inválido (formato: XXX.XXX.XXX-XX)';
         }
 
-        if (!formData.dataNascimento) {
-            newErrors.dataNascimento = 'Data de nascimento é obrigatória';
+        if (!formData.data_nascimento) {
+            newErrors.data_nascimento = 'Data de nascimento é obrigatória';
         }
 
-        if (!formData.genero) {
-            newErrors.genero = 'Gênero é obrigatório';
-        }
-
-        if (!formData.grupo) {
-            newErrors.grupo = 'Grupo é obrigatório';
+        if (!formData.estado_civil) {
+            newErrors.estado_civil = 'Estado civil é obrigatório';
         }
 
         setErrors(newErrors);
@@ -236,30 +248,62 @@ function CreateAssociadoModal({
         }
 
         setIsSubmitting(true);
+        setErrorMessage('');
 
-        setTimeout(() => {
-            console.log('Cadastrando novo associado:', formData);
-            setSuccessMessage('Associado criado com sucesso!');
+        try {
+            const payload = {
+                numero_inscricao: parseInt(formData.numero_inscricao),
+                nome_completo: formData.nome_completo,
+                cpf: formData.cpf,
+                rg: formData.rg || null,
+                estado_civil: formData.estado_civil,
+                data_nascimento: formData.data_nascimento,
+                email: formData.email,
+                celular: formData.celular,
+                telefone: formData.telefone || null,
+                cep: formData.cep,
+                logradouro: formData.rua,
+                numero: formData.numero,
+                bairro: formData.bairro,
+                cidade: formData.cidade,
+            };
+
+            router.post('/cadastros/associados', payload, {
+                onSuccess: () => {
+                    setSuccessMessage('Associado criado com sucesso!');
+                    setIsSubmitting(false);
+
+                    setTimeout(() => {
+                        handleClose();
+                    }, 1200);
+                },
+                onError: () => {
+                    setErrorMessage('Confira os dados e tente novamente.');
+                    setIsSubmitting(false);
+                },
+            });
+        } catch (error) {
+            setErrorMessage(
+                error instanceof Error
+                    ? error.message
+                    : 'Erro ao criar associado',
+            );
             setIsSubmitting(false);
-
-            setTimeout(() => {
-                handleClose();
-            }, 2000);
-        }, 1000);
+        }
     };
 
     const handleClose = () => {
         setCurrentStep(1);
         setFormData({
-            nomeCompleto: '',
+            numero_inscricao: '',
+            nome_completo: '',
             cpf: '',
             rg: '',
-            dataNascimento: '',
-            genero: '',
-            grupo: '',
+            estado_civil: '',
+            data_nascimento: '',
             email: '',
             celular: '',
-            telefoneFIxo: '',
+            telefone: '',
             cep: '',
             rua: '',
             numero: '',
@@ -269,6 +313,7 @@ function CreateAssociadoModal({
         });
         setErrors({});
         setSuccessMessage('');
+        setErrorMessage('');
         onClose();
     };
 
@@ -305,6 +350,12 @@ function CreateAssociadoModal({
                             </DialogDescription>
                         </DialogHeader>
 
+                        {errorMessage && (
+                            <div className="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                                {errorMessage}
+                            </div>
+                        )}
+
                         <div className="flex gap-2">
                             {[1, 2, 3].map((step) => (
                                 <div
@@ -321,28 +372,55 @@ function CreateAssociadoModal({
                         {currentStep === 1 && (
                             <div className="space-y-4">
                                 <div>
-                                    <Label htmlFor="nomeCompleto">
-                                        Nome Completo *
+                                    <Label htmlFor="numero_inscricao">
+                                        Número de Inscrição *
                                     </Label>
                                     <Input
-                                        id="nomeCompleto"
-                                        placeholder="Digite o nome completo"
-                                        value={formData.nomeCompleto}
+                                        id="numero_inscricao"
+                                        placeholder="Digite o número"
+                                        value={formData.numero_inscricao}
                                         onChange={(e) =>
                                             handleInputChange(
-                                                'nomeCompleto',
+                                                'numero_inscricao',
                                                 e.target.value,
                                             )
                                         }
                                         className={
-                                            errors.nomeCompleto
+                                            errors.numero_inscricao
                                                 ? 'border-red-500'
                                                 : ''
                                         }
                                     />
-                                    {errors.nomeCompleto && (
+                                    {errors.numero_inscricao && (
                                         <p className="mt-1 text-sm text-red-500">
-                                            {errors.nomeCompleto}
+                                            {errors.numero_inscricao}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="nome_completo">
+                                        Nome Completo *
+                                    </Label>
+                                    <Input
+                                        id="nome_completo"
+                                        placeholder="Digite o nome completo"
+                                        value={formData.nome_completo}
+                                        onChange={(e) =>
+                                            handleInputChange(
+                                                'nome_completo',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={
+                                            errors.nome_completo
+                                                ? 'border-red-500'
+                                                : ''
+                                        }
+                                    />
+                                    {errors.nome_completo && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors.nome_completo}
                                         </p>
                                     )}
                                 </div>
@@ -391,98 +469,64 @@ function CreateAssociadoModal({
                                     </div>
                                 </div>
 
-                                <div>
-                                    <Label htmlFor="dataNascimento">
-                                        Data de Nascimento *
-                                    </Label>
-                                    <Input
-                                        id="dataNascimento"
-                                        type="date"
-                                        value={formData.dataNascimento}
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                'dataNascimento',
-                                                e.target.value,
-                                            )
-                                        }
-                                        className={
-                                            errors.dataNascimento
-                                                ? 'border-red-500'
-                                                : ''
-                                        }
-                                    />
-                                    {errors.dataNascimento && (
-                                        <p className="mt-1 text-sm text-red-500">
-                                            {errors.dataNascimento}
-                                        </p>
-                                    )}
-                                </div>
-
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <Label htmlFor="genero">
-                                            Gênero *
+                                        <Label htmlFor="data_nascimento">
+                                            Data de Nascimento *
                                         </Label>
-                                        <Select
-                                            value={formData.genero}
-                                            onValueChange={(value) =>
+                                        <Input
+                                            id="data_nascimento"
+                                            type="date"
+                                            value={formData.data_nascimento}
+                                            onChange={(e) =>
                                                 handleInputChange(
-                                                    'genero',
-                                                    value,
+                                                    'data_nascimento',
+                                                    e.target.value,
                                                 )
                                             }
-                                        >
-                                            <SelectTrigger id="genero">
-                                                <SelectValue placeholder="Selecione" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="masculino">
-                                                    Masculino
-                                                </SelectItem>
-                                                <SelectItem value="feminino">
-                                                    Feminino
-                                                </SelectItem>
-                                                <SelectItem value="outro">
-                                                    Outro
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        {errors.genero && (
+                                            className={
+                                                errors.data_nascimento
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
+                                        />
+                                        {errors.data_nascimento && (
                                             <p className="mt-1 text-sm text-red-500">
-                                                {errors.genero}
+                                                {errors.data_nascimento}
                                             </p>
                                         )}
                                     </div>
 
                                     <div>
-                                        <Label htmlFor="grupo">Grupo *</Label>
+                                        <Label htmlFor="estado_civil">
+                                            Estado Civil *
+                                        </Label>
                                         <Select
-                                            value={formData.grupo}
+                                            value={formData.estado_civil}
                                             onValueChange={(value) =>
                                                 handleInputChange(
-                                                    'grupo',
+                                                    'estado_civil',
                                                     value,
                                                 )
                                             }
                                         >
-                                            <SelectTrigger id="grupo">
+                                            <SelectTrigger id="estado_civil">
                                                 <SelectValue placeholder="Selecione" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="grupo-a">
-                                                    Grupo A
-                                                </SelectItem>
-                                                <SelectItem value="grupo-b">
-                                                    Grupo B
-                                                </SelectItem>
-                                                <SelectItem value="grupo-c">
-                                                    Grupo C
-                                                </SelectItem>
+                                                {estadosCivis.map((estado) => (
+                                                    <SelectItem
+                                                        key={estado}
+                                                        value={estado}
+                                                    >
+                                                        {estado}
+                                                    </SelectItem>
+                                                ))}
                                             </SelectContent>
                                         </Select>
-                                        {errors.grupo && (
+                                        {errors.estado_civil && (
                                             <p className="mt-1 text-sm text-red-500">
-                                                {errors.grupo}
+                                                {errors.estado_civil}
                                             </p>
                                         )}
                                     </div>
@@ -546,16 +590,16 @@ function CreateAssociadoModal({
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="telefoneFIxo">
+                                    <Label htmlFor="telefone">
                                         Telefone Fixo
                                     </Label>
                                     <Input
-                                        id="telefoneFIxo"
+                                        id="telefone"
                                         placeholder="(00) 0000-0000"
-                                        value={formData.telefoneFIxo}
+                                        value={formData.telefone}
                                         onChange={(e) =>
                                             handleInputChange(
-                                                'telefoneFIxo',
+                                                'telefone',
                                                 e.target.value,
                                             )
                                         }
