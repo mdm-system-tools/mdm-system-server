@@ -1,5 +1,3 @@
-'use client';
-
 import { Form } from '@inertiajs/react';
 import { useState } from 'react';
 

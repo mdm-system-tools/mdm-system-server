@@ -13,6 +13,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 
     // Chamadas routes
+    Route::get('chamadas', [ChamadaController::class, 'chamadas'])->name('chamadas');
+    Route::post('chamadas', [ChamadaController::class, 'storeChamada'])->name('chamadas.store');
     Route::get('historico-chamadas', [ChamadaController::class, 'index'])->name('historico-chamadas');
     Route::get('historico-chamadas/{chamada}', [ChamadaController::class, 'show'])->name('detalhes-chamada');
 

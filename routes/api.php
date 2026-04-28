@@ -60,6 +60,8 @@ Route::prefix('v1')->middleware("auth:sanctum")->group(function () {
     Route::apiResource('reunioes', ReuniaoController::class)
         ->missing($missingModel('Reunião'));
 
+    Route::post('reunioes-chamada', [\App\Http\Controllers\Web\ChamadaController::class, 'storeChamada']);
+
     // --- LOCALS ---
     Route::apiResource('locals', LocalController::class)
         ->missing($missingModel('Local'));

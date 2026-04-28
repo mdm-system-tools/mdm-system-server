@@ -16,7 +16,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { cadastros, dashboard, historicoChamadas } from '@/routes';
+import { cadastros, dashboard, historicoChamadas, chamadas } from '@/routes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -28,14 +28,6 @@ const mainNavItems: NavItem[] = [
 ];
 
 // Quick action functions
-const getChamadas = () => {
-    console.log('buscando chamadas');
-};
-
-const getHistoricoChamadas = () => {
-    console.log('buscando histórico de chamadas');
-};
-
 const getFuncionarios = () => {
     console.log('buscando funcionários');
 };
@@ -44,7 +36,7 @@ const quickActionItems: QuickActionItem[] = [
     {
         title: 'Chamada',
         icon: Phone,
-        onClick: getChamadas,
+        href: chamadas().url,
     },
     {
         title: 'Histórico de Chamada',
