@@ -14,21 +14,21 @@ class Projeto extends Model
         'nome',
         'regiao',
         'valor',
-        "status",
-        "concluido",
+        'status',
+        'concluido',
     ];
 
-    function grupos(): hasMany
+    public function grupos(): HasMany
     {
         return $this->hasMany(Grupo::class);
     }
 
-    function reunioes(): HasMany
+    public function reunioes(): HasMany
     {
         return $this->hasMany(Reuniao::class);
     }
 
-    function dividas():HasMany
+    public function dividas(): HasMany
     {
         return $this->hasMany(Divida::class);
     }

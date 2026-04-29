@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\Web\CadastrosController;
-use App\Http\Controllers\Web\ChamadaController;
+use App\Http\Controllers\AssociadoController;
+use App\Http\Controllers\CadastrosController;
+use App\Http\Controllers\ChamadaController;
+use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\ProjetoController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -10,29 +13,38 @@ Route::inertia('/', 'welcome', [
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', [CadastrosController::class, 'dashboard'])->name('dashboard');
 
     // Chamadas routes
-    Route::get('chamadas', [ChamadaController::class, 'chamadas'])->name('chamadas');
-    Route::post('chamadas', [ChamadaController::class, 'storeChamada'])->name('chamadas.store');
-    Route::get('historico-chamadas', [ChamadaController::class, 'index'])->name('historico-chamadas');
+    Route::get('chamadas', [ChamadaController::class, 'index'])->name('chamadas');
+    Route::post('chamadas', [ChamadaController::class, 'store'])->name('chamadas.store');
+    Route::get('historico-chamadas', [ChamadaController::class, 'indexHistorico'])->name('historico-chamadas');
     Route::get('historico-chamadas/{chamada}', [ChamadaController::class, 'show'])->name('detalhes-chamada');
 
-    // Cadastros routes
+    // Cadastros e dashboard routes
     Route::get('cadastros', [CadastrosController::class, 'index'])->name('cadastros');
-    Route::post('cadastros/associados', [CadastrosController::class, 'storeAssociado'])->name('cadastros.associados.store');
-    Route::post('cadastros/grupos', [CadastrosController::class, 'storeGrupo'])->name('cadastros.grupos.store');
-    Route::post('cadastros/projetos', [CadastrosController::class, 'storeProjeto'])->name('cadastros.projetos.store');
-    Route::get('associados/{associado}', [CadastrosController::class, 'showAssociado'])->name('detalhes-associado');
-    Route::patch('associados/{associado}', [CadastrosController::class, 'updateAssociado'])->name('cadastros.associados.update');
-    Route::post('associados/{associado}/cobrancas', [CadastrosController::class, 'storeCobranca'])->name('cadastros.cobrancas.store');
-    Route::post('associados/{associado}/dependentes', [CadastrosController::class, 'storeDependente'])->name('cadastros.dependentes.store');
-    Route::patch('associados/{associado}/dependentes/{dependente}', [CadastrosController::class, 'updateDependente'])->name('cadastros.dependentes.update');
-    Route::delete('associados/{associado}/dependentes/{dependente}', [CadastrosController::class, 'destroyDependente'])->name('cadastros.dependentes.destroy');
-    Route::get('grupos/{grupo}', [CadastrosController::class, 'showGrupo'])->name('detalhes-grupo');
-    Route::patch('grupos/{grupo}', [CadastrosController::class, 'updateGrupo'])->name('cadastros.grupos.update');
-    Route::get('projetos/{projeto}', [CadastrosController::class, 'showProjeto'])->name('detalhes-projeto');
-    Route::patch('projetos/{projeto}', [CadastrosController::class, 'updateProjeto'])->name('cadastros.projetos.update');
+    Route::get('dashboard', [CadastrosController::class, 'dashboard'])->name('dashboard');
+
+    // Associados routes
+    Route::post('cadastros/associados', [AssociadoController::class, 'store'])->name('cadastros.associados.store');
+    Route::get('associados/{associado}', [AssociadoController::class, 'show'])->name('detalhes-associado');
+    Route::patch('/associados/{associado}/activate', [AssociadoController::class, 'activate']);
+    Route::patch('/associados/{associado}/deactivate', [AssociadoController::class, 'deactivate']);
+    Route::patch('/associados/{associado}/setgrupo', [AssociadoController::class, 'setGrupo']);
+    Route::patch('associados/{associado}', [AssociadoController::class, 'updateAssociado']);
+    Route::post('associados/{associado}/dependentes', [AssociadoController::class, 'storeDependente'])->name('cadastros.dependentes.store');
+    Route::patch('associados/{associado}/dependentes/{dependente}', [AssociadoController::class, 'updateDependente']);
+    Route::delete('associados/{associado}/dependentes/{dependente}', [AssociadoController::class, 'destroyDependente']);
+    Route::post('associados/{associado}/cobrancas', [AssociadoController::class, 'storeCobranca']);
+
+    // Grupos routes
+    Route::patch('grupos/{grupo}', [GrupoController::class, 'update'])->name('cadastros.grupos.update');
+    Route::post('cadastros/grupos', [GrupoController::class, 'store'])->name('cadastros.grupos.store');
+    Route::get('grupos/{grupo}', [GrupoController::class, 'show'])->name('detalhes-grupo');
+
+    // Projetos routes
+    Route::patch('projetos/{projeto}', [ProjetoController::class, 'update'])->name('cadastros.projetos.update');
+    Route::post('cadastros/projetos', [ProjetoController::class, 'store'])->name('cadastros.projetos.store');
+    Route::get('projetos/{projeto}', [ProjetoController::class, 'show'])->name('detalhes-projeto');
 });
 
 require __DIR__.'/settings.php';

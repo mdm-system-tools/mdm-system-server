@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Associado extends Model
 {
     use HasFactory;
+
     /**
      * Atributos que podem ser preenchidos em massa.
      */
@@ -32,7 +33,7 @@ class Associado extends Model
         'renda_familiar',
         'documentos_img_id',
         'certidao_id',
-        "grupo_id",
+        'grupo_id',
     ];
 
     protected $casts = [
@@ -45,42 +46,42 @@ class Associado extends Model
     protected function phone(): Attribute
     {
         return Attribute::make(
-            set: fn($value) => preg_replace('/[^0-9+]/', '', $value),
+            set: fn ($value) => preg_replace('/[^0-9+]/', '', $value),
         );
     }
 
-    function grupo(): BelongsTo
+    public function grupo(): BelongsTo
     {
         return $this->belongsTo(Grupo::class);
     }
 
-    function chamadas(): HasMany
+    public function chamadas(): HasMany
     {
         return $this->hasMany(Chamada::class);
     }
 
-    function pagamentos(): HasMany
+    public function pagamentos(): HasMany
     {
         return $this->hasMany(Pagamento::class);
     }
 
-    function dependentes(): HasMany
+    public function dependentes(): HasMany
     {
         return $this->hasMany(Dependente::class
         );
     }
 
-    function endereco(): HasOne
+    public function endereco(): HasOne
     {
         return $this->hasOne(Endereco::class);
     }
 
-    function tituloEleitor(): HasOne
+    public function tituloEleitor(): HasOne
     {
         return $this->hasOne(TituloEleitor::class);
     }
 
-    function representante(): HasOne
+    public function representante(): HasOne
     {
         return $this->hasOne(Representante::class);
     }

@@ -19,10 +19,11 @@ class CepApiClientController extends Controller
             ->get("https://viacep.com.br/ws/{$request->cep}/json/");
 
         if ($response->failed()) {
-            return response()->json(["message" => "Cep não encontrado"], ResponseAlias::HTTP_BAD_REQUEST);
+            return response()->json(['message' => 'Cep não encontrado'], ResponseAlias::HTTP_BAD_REQUEST);
         }
 
         $data = $response->json();
+
         return response()->json([
             'cep' => $data['cep'] ?? null,
             'logradouro' => $data['logradouro'] ?? null,

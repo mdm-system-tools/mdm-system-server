@@ -9,6 +9,9 @@ use App\Models\Grupo;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class GrupoController extends Controller
@@ -24,41 +27,41 @@ class GrupoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGrupoRequest $request): JsonResponse|RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        try {
-            if (Grupo::create($request->validated()) != null) {
-                if (! request()->expectsJson()) {
-                    return to_route('cadastros')->with('success', 'Grupo criado com sucesso.');
-                }
+        $validated = $request->validate([
+            'projeto_id' => ['required', 'exists:projetos,id'],
+            'horario' => ['required', 'date_format:H:i'],
+        ]);
 
-                return response()->json(['message' => 'criando com sucesso'], ResponseAlias::HTTP_CREATED);
-            }
-        } catch (Exception $e) {
-            return response()->json(['message' => 'ocorreu um erro', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        Grupo::query()->create($validated);
+
+        return to_route('cadastros')->with('success', 'Grupo criado com sucesso.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Grupo $grupo)
+    public function show(Grupo $grupo): Response
     {
-        return new GrupoResource($grupo);
+        return Inertia::render('detalhes-grupo', [
+            'grupo' => $grupo->load(['projeto', 'associados'])->loadCount('associados'),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGrupoRequest $request, Grupo $grupo)
+    public function update(Request $request, Grupo $grupo): RedirectResponse
     {
-        try {
-            if ($grupo->update($request->validated())) {
-                return response()->json(['message' => 'atualizado com sucesso'], ResponseAlias::HTTP_OK);
-            }
-        } catch (Exception $e) {
-            return response()->json(['message' => 'ocorreu um erro', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        $validated = $request->validate([
+            'projeto_id' => ['required', 'exists:projetos,id'],
+            'horario' => ['required', 'date_format:H:i'],
+        ]);
+
+        $grupo->update($validated);
+
+        return back()->with('success', 'Grupo atualizado com sucesso.');
     }
 
     /**
