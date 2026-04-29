@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chamada;
-use App\Models\Grupo;
 use App\Models\Local;
 use App\Models\Projeto;
 use App\Models\Reuniao;
@@ -16,51 +15,71 @@ class ChamadaController extends Controller
 {
     public function chamadas(): Response
     {
-        return Inertia::render('chamadas');
+        return Inertia::render('chamadas', [
+            'reunioes' => Reuniao::query()
+                ->with([
+                    'projeto:id,nome',
+                    'projeto.grupos:id,projeto_id,horario',
+                    'local:id,logradouro,numero,bairro,cidade',
+                ])
+                ->get(),
+            'projetos' => Projeto::query()
+                ->with('grupos:id,projeto_id,horario')
+                ->get(['id', 'nome']),
+        ]);
     }
 
     public function storeChamada(Request $request)
     {
         $validated = $request->validate([
             'projeto_id' => 'required|exists:projetos,id',
-            'data_marcada' => 'required|date|after:today',
+            'data_marcada' => 'required|date',
             'horario_inicio' => 'required|date_format:H:i',
-            'nome' => 'required|string|max:100',
-            'cep' => 'required|string|size:8',
-            'logradouro' => 'required|string|max:100',
-            'numero' => 'required|string',
-            'bairro' => 'required|string|max:100',
-            'cidade' => 'required|string|max:100',
-            'estado' => 'required|string|max:100',
-            'regiao' => 'required|string|max:100',
+            'local' => 'nullable|array',
+            'local.nome' => 'nullable|string|max:255',
+            'local.logradouro' => 'required_with:local|string|max:255',
+            'local.numero' => 'required_with:local|string|max:20',
+            'local.bairro' => 'required_with:local|string|max:100',
+            'local.cidade' => 'required_with:local|string|max:100',
+            'local.cep' => 'nullable|string|max:20',
+            'local.estado' => 'nullable|string|max:100',
+            'local.regiao' => 'nullable|string|max:100',
         ]);
 
-        // Criar Local
-        $local = Local::create([
-            'nome' => $validated['nome'],
-            'cep' => $validated['cep'],
-            'logradouro' => $validated['logradouro'],
-            'bairro' => $validated['bairro'],
-            'cidade' => $validated['cidade'],
-            'estado' => $validated['estado'],
-            'regiao' => $validated['regiao'],
-            'tipo' => true, // true = externo
-        ]);
+        // Criar ou usar Local existente
+        if (isset($validated['local']) && ! isset($validated['local_id'])) {
+            $local = Local::create([
+                'nome' => $validated['local']['nome'] ?? $validated['local']['logradouro'],
+                'logradouro' => $validated['local']['logradouro'],
+                'numero' => $validated['local']['numero'],
+                'bairro' => $validated['local']['bairro'],
+                'cidade' => $validated['local']['cidade'],
+                'cep' => $validated['local']['cep'] ?? '00000000',
+                'estado' => $validated['local']['estado'] ?? 'Não informado',
+                'regiao' => $validated['local']['regiao'] ?? 'Não informado',
+                'tipo' => false, // false = interno
+            ]);
+            $localId = $local->id;
+        } else {
+            $localId = $validated['local_id'] ?? null;
+        }
+
+        // Pegar projeto com grupos
+        $projeto = Projeto::with(['grupos' => function ($query) {
+            $query->orderBy('horario', 'asc');
+        }])->findOrFail($validated['projeto_id']);
 
         // Criar Reunião
         $reuniao = Reuniao::create([
-            'local_id' => $local->id,
-            'projeto_id' => $validated['projeto_id'],
+            'local_id' => $localId,
+            'projeto_id' => $projeto->id,
             'data_marcada' => $validated['data_marcada'],
-            'horario_inicio' => $validated['horario_inicio'],
-            'horario_fim' => $validated['horario_inicio'],
+            'horario_inicio' => $validated['data_marcada'].' '.$validated['horario_inicio'],
+            'horario_fim' => $validated['data_marcada'].' '.$validated['horario_inicio'],
         ]);
 
-        // Pegar todos os grupos do projeto
-        $grupos = Grupo::where('projeto_id', $validated['projeto_id'])->get();
-
         // Criar chamadas para cada associado de cada grupo
-        foreach ($grupos as $grupo) {
+        foreach ($projeto->grupos as $grupo) {
             $associados = $grupo->associados()->get(['numero_inscricao']);
             foreach ($associados as $associado) {
                 Chamada::create([

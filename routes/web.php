@@ -10,7 +10,7 @@ Route::inertia('/', 'welcome', [
 ])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', [CadastrosController::class, 'dashboard'])->name('dashboard');
 
     // Chamadas routes
     Route::get('chamadas', [ChamadaController::class, 'chamadas'])->name('chamadas');

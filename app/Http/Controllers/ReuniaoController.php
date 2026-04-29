@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReuniaoRequest;
 use App\Http\Requests\UpdateReuniaoRequest;
 use App\Http\Resources\ReuniaoResource;
+use App\Models\Chamada;
+use App\Models\Local;
 use App\Models\Projeto;
 use App\Models\Reuniao;
 use Exception;
@@ -27,23 +29,46 @@ class ReuniaoController extends Controller
         try {
             $valid = $request->validated();
 
+            // Se enviou dados do local, cria primeiro
+            if ($request->has('local') && ! isset($valid['local_id'])) {
+                $localData = $request->input('local');
+                $local = Local::create([
+                    'logradouro' => $localData['logradouro'],
+                    'numero' => $localData['numero'],
+                    'bairro' => $localData['bairro'],
+                    'cidade' => $localData['cidade'],
+                    'tipo' => false, // interno
+                ]);
+                $valid['local_id'] = $local->id;
+            }
+
             $projeto = Projeto::with(['grupos' => function ($query) {
                 $query->orderBy('horario', 'asc');
-            }])->findOrFail($valid["projeto_id"]);
-
-            $horarioInicio = $projeto->grupos->first()?->horario;
-            $horarioFim = $projeto->grupos->last()?->horario;
+            }])->findOrFail($valid['projeto_id']);
 
             $reuniao = Reuniao::create([
-                "local_id" => $valid["local_id"],
-                "projeto_id" => $valid["projeto_id"],
-                "data_marcada" => $valid["data_marcada"],
-                "horario_inicio" => $horarioInicio,
-                "horario_fim" => $horarioFim,
+                'local_id' => $valid['local_id'],
+                'projeto_id' => $valid['projeto_id'],
+                'data_marcada' => $valid['data_marcada'],
+                'horario_inicio' => $valid['data_marcada'].' '.$valid['horario_inicio'],
+                'horario_fim' => $valid['data_marcada'].' '.$valid['horario_inicio'],
             ]);
+
+            // Criar chamadas para cada associado de cada grupo
+            foreach ($projeto->grupos as $grupo) {
+                $associados = $grupo->associados()->get(['numero_inscricao']);
+                foreach ($associados as $associado) {
+                    Chamada::create([
+                        'numero_inscricao' => $associado->numero_inscricao,
+                        'reuniao_id' => $reuniao->id,
+                        'presenca' => false,
+                    ]);
+                }
+            }
+
             return response()->json(new ReuniaoResource($reuniao), 201);
         } catch (Exception $e) {
-            return response()->json($e->getMessage(), 500);
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 

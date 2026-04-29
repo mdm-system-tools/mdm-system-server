@@ -1,9 +1,24 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { ChevronLeft, Calendar, Clock, MapPin, } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { chamadas } from '@/routes';
 
 interface Local {
@@ -41,6 +56,7 @@ interface ChamadasProps {
     projetos?: Array<{
         id: number;
         nome: string;
+        grupos?: Grupo[];
     }>;
     flash?: {
         success?: string;
@@ -119,15 +135,55 @@ function ReuniaoCard({ reuniao }: { reuniao: Reuniao }) {
 
 function Chamadas({
     reunioes = [],
+    projetos = [],
     flash,
 }: ChamadasProps) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        projeto_id: '',
+        data_marcada: '',
+        horario_inicio: '',
+        local: {
+            logradouro: '',
+            numero: '',
+            bairro: '',
+            cidade: '',
+        },
+    });
 
     const filteredReuniones = reunioes.filter((reuniao) =>
         reuniao.projeto.nome
             .toLowerCase()
             .includes(searchTerm.toLowerCase()),
     );
+
+    const handleInputChange = (field: string, value: string) => {
+        setData(field as keyof typeof data, value);
+    };
+
+    const handleLocalChange = (field: string, value: string) => {
+        setData('local', {
+            ...data.local,
+            [field]: value,
+        } as any);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post('/chamadas', {
+            preserveScroll: true,
+            onSuccess: () => {
+                handleCloseModal();
+            },
+        });
+    };
+
+    const handleCloseModal = () => {
+        setIsCreateModalOpen(false);
+        reset();
+    };
 
     return (
         <>
@@ -158,7 +214,10 @@ function Chamadas({
                             Chamadas
                         </h1>
                     </div>
-
+                    <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
+                        <span>+</span>
+                        Criar Reunião
+                    </Button>
                 </div>
 
                 {/* Search */}
@@ -187,11 +246,228 @@ function Chamadas({
                 </div>
 
                 {/* Create Chamada Modal */}
+                <Dialog open={isCreateModalOpen} onOpenChange={(open) => !open && handleCloseModal()}>
+                    <DialogContent className="max-w-md">
+                        <form onSubmit={handleSubmit}>
+                            <DialogHeader>
+                                <DialogTitle>Criar Reunião</DialogTitle>
+                                <DialogDescription>
+                                    Preencha os dados para criar uma nova reunião
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <Label htmlFor="projeto_id">Projeto *</Label>
+                                    <Select
+                                        value={data.projeto_id}
+                                        onValueChange={(value) =>
+                                            handleInputChange('projeto_id', value)
+                                        }
+                                    >
+                                        <SelectTrigger id="projeto_id">
+                                            <SelectValue placeholder="Selecione um projeto" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {projetos.map((projeto) => (
+                                                <SelectItem
+                                                    key={projeto.id}
+                                                    value={projeto.id.toString()}
+                                                >
+                                                    {projeto.nome}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    {errors.projeto_id && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors.projeto_id}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="data_marcada">Data *</Label>
+                                    <Input
+                                        id="data_marcada"
+                                        type="date"
+                                        value={data.data_marcada}
+                                        onChange={(e) =>
+                                            handleInputChange(
+                                                'data_marcada',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={
+                                            errors.data_marcada
+                                                ? 'border-red-500'
+                                                : ''
+                                        }
+                                    />
+                                    {errors.data_marcada && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors.data_marcada}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="horario_inicio">Horário *</Label>
+                                    <Input
+                                        id="horario_inicio"
+                                        type="time"
+                                        value={data.horario_inicio}
+                                        onChange={(e) =>
+                                            handleInputChange(
+                                                'horario_inicio',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={
+                                            errors.horario_inicio
+                                                ? 'border-red-500'
+                                                : ''
+                                        }
+                                    />
+                                    {errors.horario_inicio && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors.horario_inicio}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="logradouro">Endereço *</Label>
+                                    <Input
+                                        id="logradouro"
+                                        placeholder="Rua/Avenida"
+                                        value={data.local.logradouro}
+                                        onChange={(e) =>
+                                            handleLocalChange(
+                                                'logradouro',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={
+                                            errors['local.logradouro']
+                                                ? 'border-red-500'
+                                                : ''
+                                        }
+                                    />
+                                    {errors['local.logradouro'] && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors['local.logradouro']}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="numero">Número *</Label>
+                                        <Input
+                                            id="numero"
+                                            placeholder="Nº"
+                                            value={data.local.numero}
+                                            onChange={(e) =>
+                                                handleLocalChange(
+                                                    'numero',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className={
+                                                errors['local.numero']
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
+                                        />
+                                        {errors['local.numero'] && (
+                                            <p className="mt-1 text-sm text-red-500">
+                                                {errors['local.numero']}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <Label htmlFor="bairro">Bairro *</Label>
+                                        <Input
+                                            id="bairro"
+                                            placeholder="Bairro"
+                                            value={data.local.bairro}
+                                            onChange={(e) =>
+                                                handleLocalChange(
+                                                    'bairro',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className={
+                                                errors['local.bairro']
+                                                    ? 'border-red-500'
+                                                    : ''
+                                            }
+                                        />
+                                        {errors['local.bairro'] && (
+                                            <p className="mt-1 text-sm text-red-500">
+                                                {errors['local.bairro']}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="cidade">Cidade *</Label>
+                                    <Input
+                                        id="cidade"
+                                        placeholder="Cidade"
+                                        value={data.local.cidade}
+                                        onChange={(e) =>
+                                            handleLocalChange(
+                                                'cidade',
+                                                e.target.value,
+                                            )
+                                        }
+                                        className={
+                                            errors['local.cidade']
+                                                ? 'border-red-500'
+                                                : ''
+                                        }
+                                    />
+                                    {errors['local.cidade'] && (
+                                        <p className="mt-1 text-sm text-red-500">
+                                            {errors['local.cidade']}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4 pt-4">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={handleCloseModal}
+                                    className="flex-1"
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="flex-1 bg-green-600 hover:bg-green-700"
+                                >
+                                    {processing
+                                        ? 'Criando...'
+                                        : '✓ Criar Reunião'}
+                                </Button>
+                            </div>
+                        </form>
+                    </DialogContent>
+                </Dialog>
 
             </div>
         </>
     );
 }
+
+export default Chamadas;
 
 Chamadas.layout = {
     breadcrumbs: [

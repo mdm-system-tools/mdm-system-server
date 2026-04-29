@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Associado;
+use App\Models\Chamada;
 use App\Models\Dependente;
 use App\Models\Divida;
 use App\Models\Endereco;
 use App\Models\Grupo;
 use App\Models\Pagamento;
 use App\Models\Projeto;
+use App\Models\Reuniao;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -264,5 +266,42 @@ class CadastrosController extends Controller
         ]);
 
         return to_route('cadastros')->with('success', 'Projeto criado com sucesso.');
+    }
+
+    public function dashboard(): Response
+    {
+        $currentMonth = now()->startOfMonth();
+        $currentMonthEnd = now()->endOfMonth();
+
+        // Contar totais
+        $totalProjetos = Projeto::count();
+        $totalAssociados = Associado::count();
+        $totalConcluidas = Chamada::where('presenca', true)->count();
+
+        // Buscar reuniões do mês atual com seus projetos
+        $reunioesMes = Reuniao::query()
+            ->whereBetween('data_marcada', [$currentMonth, $currentMonthEnd])
+            ->with([
+                'projeto:id,nome',
+                'projeto.grupos:id,projeto_id,horario',
+                'local:id,logradouro,numero,bairro,cidade',
+            ])
+            ->orderBy('data_marcada')
+            ->get();
+
+        // Buscar projetos que têm reuniões no mês
+        $projetosComReuniao = Projeto::query()
+            ->whereHas('reunioes', function ($query) use ($currentMonth, $currentMonthEnd) {
+                $query->whereBetween('data_marcada', [$currentMonth, $currentMonthEnd]);
+            })
+            ->get(['id', 'nome']);
+
+        return Inertia::render('dashboard', [
+            'totalProjetos' => $totalProjetos,
+            'totalAssociados' => $totalAssociados,
+            'totalConcluidas' => $totalConcluidas,
+            'reunioesMes' => $reunioesMes,
+            'projetosComReuniao' => $projetosComReuniao,
+        ]);
     }
 }
