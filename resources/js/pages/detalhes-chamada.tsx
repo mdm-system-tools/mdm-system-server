@@ -2,44 +2,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ChevronLeft, CheckCircle2, XCircle } from 'lucide-react';
 
 import { historicoChamadas } from '@/routes';
-
-interface Chamada {
-    id: number;
-    numero_inscricao: string;
-    reuniao_id: number;
-    presenca: boolean;
-    justificativa: string | null;
-    created_at: string;
-    associado: {
-        id: number;
-        nome_completo: string;
-        numero_inscricao: string;
-        email: string;
-        celular: string;
-    };
-    reuniao: {
-        id: number;
-        data_marcada: string;
-        horario_inicio: string;
-        horario_fim: string;
-        projeto: {
-            id: number;
-            nome: string;
-        };
-        chamada: Array<{
-            id: number;
-            presenca: boolean;
-            associado: {
-                nome_completo: string;
-            };
-        }>;
-    };
-    chamada_count?: number;
-}
-
-interface DetalhesChamadaProps {
-    chamada: Chamada;
-}
+import type { DetalhesChamadaProps } from '@/types/detalhes';
 
 function DetalhesChamada({ chamada }: DetalhesChamadaProps) {
     const presentCount = chamada.reuniao.chamada?.filter((c) => c.presenca).length || 0;

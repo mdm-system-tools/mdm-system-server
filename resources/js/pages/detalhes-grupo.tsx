@@ -4,22 +4,7 @@ import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { cadastros, detalhesAssociado } from '@/routes';
-
-interface DetalhesGrupoProps {
-    grupo: {
-        id: number;
-        horario: string;
-        projeto_id: number;
-        associados_count: number;
-        projeto: { id: number; nome: string } | null;
-        associados: Array<{
-            id: number;
-            nome_completo: string;
-            email: string | null;
-            status: boolean;
-        }>;
-    };
-}
+import type { DetalhesGrupoProps } from '@/types/detalhes';
 
 export default function DetalhesGrupo({ grupo }: DetalhesGrupoProps) {
     const [isEditing, setIsEditing] = useState(false);

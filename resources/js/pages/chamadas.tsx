@@ -1,7 +1,6 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { ChevronLeft, Calendar, Clock, MapPin, } from 'lucide-react';
+import { ChevronLeft, Calendar, Clock, MapPin } from 'lucide-react';
 import { useState } from 'react';
-
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -20,49 +19,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { chamadas } from '@/routes';
-
-interface Local {
-    id: number;
-    logradouro: string;
-    numero: string;
-    bairro: string;
-    cidade: string;
-}
-
-interface Grupo {
-    id: number;
-    projeto_id: number;
-    horario: string;
-}
-
-interface Projeto {
-    id: number;
-    nome: string;
-    grupos: Grupo[];
-}
-
-interface Reuniao {
-    id: number;
-    data_marcada: string;
-    horario_inicio: string;
-    projeto_id: number;
-    local_id: number;
-    projeto: Projeto;
-    local: Local;
-}
-
-interface ChamadasProps {
-    reunioes?: Reuniao[];
-    projetos?: Array<{
-        id: number;
-        nome: string;
-        grupos?: Grupo[];
-    }>;
-    flash?: {
-        success?: string;
-        error?: string;
-    };
-}
+import type { ChamadasProps, Reuniao } from '@/types/chamadas';
 
 function ReuniaoCard({ reuniao }: { reuniao: Reuniao }) {
     return (
@@ -72,26 +29,31 @@ function ReuniaoCard({ reuniao }: { reuniao: Reuniao }) {
                     {reuniao.projeto.nome}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(reuniao.data_marcada) < new Date() ? 'Concluída' : 'Agendada'}
+                    {new Date(reuniao.data_marcada) < new Date()
+                        ? 'Concluída'
+                        : 'Agendada'}
                 </p>
             </div>
 
             <div className="mb-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Calendar className="size-4" />
-                    {new Date(reuniao.data_marcada).toLocaleDateString('pt-BR', {
-                        weekday: 'long',
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric',
-                    })}
+                    {new Date(reuniao.data_marcada).toLocaleDateString(
+                        'pt-BR',
+                        {
+                            weekday: 'long',
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                        },
+                    )}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Clock className="size-4" />
                     {reuniao.horario_inicio}
                 </div>
                 <div className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <MapPin className="size-4 shrink-0 mt-0.5" />
+                    <MapPin className="mt-0.5 size-4 shrink-0" />
                     <span>
                         {reuniao.local.logradouro}, {reuniao.local.numero} -{' '}
                         {reuniao.local.bairro}, {reuniao.local.cidade}
@@ -122,7 +84,8 @@ function ReuniaoCard({ reuniao }: { reuniao: Reuniao }) {
                             </Button>
                         </div>
                     ))}
-                    {(!reuniao.projeto.grupos || reuniao.projeto.grupos.length === 0) && (
+                    {(!reuniao.projeto.grupos ||
+                        reuniao.projeto.grupos.length === 0) && (
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                             Nenhum grupo cadastrado para este projeto
                         </p>
@@ -133,11 +96,7 @@ function ReuniaoCard({ reuniao }: { reuniao: Reuniao }) {
     );
 }
 
-function Chamadas({
-    reunioes = [],
-    projetos = [],
-    flash,
-}: ChamadasProps) {
+function Chamadas({ reunioes = [], projetos = [], flash }: ChamadasProps) {
     const [searchTerm, setSearchTerm] = useState('');
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -154,9 +113,7 @@ function Chamadas({
     });
 
     const filteredReuniones = reunioes.filter((reuniao) =>
-        reuniao.projeto.nome
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()),
+        reuniao.projeto.nome.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     const handleInputChange = (field: string, value: string) => {
@@ -214,7 +171,10 @@ function Chamadas({
                             Chamadas
                         </h1>
                     </div>
-                    <Button onClick={() => setIsCreateModalOpen(true)} className="gap-2">
+                    <Button
+                        onClick={() => setIsCreateModalOpen(true)}
+                        className="gap-2"
+                    >
                         <span>+</span>
                         Criar Reunião
                     </Button>
@@ -246,23 +206,32 @@ function Chamadas({
                 </div>
 
                 {/* Create Chamada Modal */}
-                <Dialog open={isCreateModalOpen} onOpenChange={(open) => !open && handleCloseModal()}>
+                <Dialog
+                    open={isCreateModalOpen}
+                    onOpenChange={(open) => !open && handleCloseModal()}
+                >
                     <DialogContent className="max-w-md">
                         <form onSubmit={handleSubmit}>
                             <DialogHeader>
                                 <DialogTitle>Criar Reunião</DialogTitle>
                                 <DialogDescription>
-                                    Preencha os dados para criar uma nova reunião
+                                    Preencha os dados para criar uma nova
+                                    reunião
                                 </DialogDescription>
                             </DialogHeader>
 
                             <div className="space-y-4">
                                 <div>
-                                    <Label htmlFor="projeto_id">Projeto *</Label>
+                                    <Label htmlFor="projeto_id">
+                                        Projeto *
+                                    </Label>
                                     <Select
                                         value={data.projeto_id}
                                         onValueChange={(value) =>
-                                            handleInputChange('projeto_id', value)
+                                            handleInputChange(
+                                                'projeto_id',
+                                                value,
+                                            )
                                         }
                                     >
                                         <SelectTrigger id="projeto_id">
@@ -312,7 +281,9 @@ function Chamadas({
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="horario_inicio">Horário *</Label>
+                                    <Label htmlFor="horario_inicio">
+                                        Horário *
+                                    </Label>
                                     <Input
                                         id="horario_inicio"
                                         type="time"
@@ -337,7 +308,9 @@ function Chamadas({
                                 </div>
 
                                 <div>
-                                    <Label htmlFor="logradouro">Endereço *</Label>
+                                    <Label htmlFor="logradouro">
+                                        Endereço *
+                                    </Label>
                                     <Input
                                         id="logradouro"
                                         placeholder="Rua/Avenida"
@@ -461,7 +434,6 @@ function Chamadas({
                         </form>
                     </DialogContent>
                 </Dialog>
-
             </div>
         </>
     );
@@ -477,4 +449,3 @@ Chamadas.layout = {
         },
     ],
 };
-

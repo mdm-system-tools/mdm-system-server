@@ -1,5 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
-import { ChevronLeft, Search, Settings, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+    ChevronLeft,
+    Search,
+    Settings,
+    CheckCircle2,
+    AlertCircle,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import CreateAssociadoModal from '@/components/create-associado-modal';
@@ -14,54 +20,27 @@ import {
     detalhesProjeto,
     home,
 } from '@/routes';
+import type {
+    CadastrosListItem,
+    CadastrosProps,
+    ListItemProps,
+} from '@/types/cadastros';
 
-interface CadastrosProps {
-    associados: Array<{
-        id: number | string;
-        nome_completo: string;
-        numero_inscricao: string;
-        status: boolean;
-    }>;
-    grupos: Array<{
-        id: number | string;
-        horario: string;
-        associados_count?: number;
-        projeto?: {
-            nome: string;
-        } | null;
-    }>;
-    projetos: Array<{
-        id: number | string;
-        nome: string;
-        status: boolean;
-    }>;
-}
-
-interface CadastrosListItem {
-    id: number | string;
-    name: string;
-    number?: string;
-    members?: number;
-    status?: boolean;
-}
-
-
-interface ListItemProps {
-    id: string | number;
-    name: string;
-    subtitle: string;
-    color: string;
-    href: string;
-    isInactive?: boolean;
-}
-
-function ListItem({ id, name, subtitle, color, href, isInactive }: ListItemProps) {
-    const bgColor = {
-        purple: 'bg-purple-200 text-purple-700',
-        blue: 'bg-blue-200 text-blue-700',
-        green: 'bg-green-200 text-green-700',
-        pink: 'bg-pink-200 text-pink-700',
-    }[color] || 'bg-purple-200 text-purple-700';
+function ListItem({
+    id,
+    name,
+    subtitle,
+    color,
+    href,
+    isInactive,
+}: ListItemProps) {
+    const bgColor =
+        {
+            purple: 'bg-purple-200 text-purple-700',
+            blue: 'bg-blue-200 text-blue-700',
+            green: 'bg-green-200 text-green-700',
+            pink: 'bg-pink-200 text-pink-700',
+        }[color] || 'bg-purple-200 text-purple-700';
 
     return (
         <Link
@@ -72,14 +51,20 @@ function ListItem({ id, name, subtitle, color, href, isInactive }: ListItemProps
                     : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'
             }`}
         >
-            <div className={`flex size-12 items-center justify-center rounded-lg font-semibold ${bgColor}`}>
+            <div
+                className={`flex size-12 items-center justify-center rounded-lg font-semibold ${bgColor}`}
+            >
                 {id}
             </div>
-            <div className="flex-1 min-w-0">
-                <p className={`font-medium ${isInactive ? 'text-red-700 dark:text-red-400 line-through' : 'text-gray-900 dark:text-white'}`}>
+            <div className="min-w-0 flex-1">
+                <p
+                    className={`font-medium ${isInactive ? 'text-red-700 line-through dark:text-red-400' : 'text-gray-900 dark:text-white'}`}
+                >
                     {name}
                 </p>
-                <p className={`text-sm ${isInactive ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                <p
+                    className={`text-sm ${isInactive ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}
+                >
                     {subtitle} {isInactive && '(Desativado)'}
                 </p>
             </div>
@@ -130,7 +115,7 @@ function TabContent({ items, type, onAddClick }: TabContentProps) {
             {/* Search and Filter */}
             <div className="flex gap-3">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" />
+                    <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-gray-400" />
                     <Input
                         placeholder="pesquisar"
                         value={searchTerm}
@@ -199,7 +184,7 @@ function TabContent({ items, type, onAddClick }: TabContentProps) {
                         return null;
                     })
                 ) : (
-                    <div className="text-center py-12">
+                    <div className="py-12 text-center">
                         <p className="text-gray-500 dark:text-gray-400">
                             Nenhum resultado encontrado
                         </p>
@@ -210,7 +195,11 @@ function TabContent({ items, type, onAddClick }: TabContentProps) {
     );
 }
 
-export default function Cadastros({ associados, grupos, projetos }: CadastrosProps) {
+export default function Cadastros({
+    associados,
+    grupos,
+    projetos,
+}: CadastrosProps) {
     const [activeTab, setActiveTab] = useState('associados');
     const [isCreateAssociadoModalOpen, setIsCreateAssociadoModalOpen] =
         useState(false);
@@ -244,7 +233,10 @@ export default function Cadastros({ associados, grupos, projetos }: CadastrosPro
             <div className="flex flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-6">
                 {/* Header */}
                 <div className="flex items-center gap-3">
-                    <Link href={home()} className="rounded-lg hover:bg-gray-100 p-2 dark:hover:bg-gray-800">
+                    <Link
+                        href={home()}
+                        className="rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
                         <ChevronLeft className="size-5 text-gray-700 dark:text-gray-300" />
                     </Link>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -260,7 +252,7 @@ export default function Cadastros({ associados, grupos, projetos }: CadastrosPro
                             <button
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
-                                className={`whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+                                className={`-mb-px border-b-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors ${
                                     activeTab === tab
                                         ? 'border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                                         : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
@@ -337,5 +329,3 @@ Cadastros.layout = {
         },
     ],
 };
-
-
