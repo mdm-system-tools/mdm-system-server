@@ -25,7 +25,7 @@ class CadastrosController extends Controller
         return Inertia::render('cadastros', [
             'associados' => Associado::query()
                 ->orderBy('nome_completo')
-                ->get(['id', 'nome_completo', 'numero_inscricao']),
+                ->get(['id', 'nome_completo', 'numero_inscricao', 'status']),
             'grupos' => Grupo::query()
                 ->with(['projeto:id,nome'])
                 ->withCount('associados')

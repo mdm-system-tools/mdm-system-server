@@ -80,7 +80,9 @@ export default function HistoricoChamadas({ chamadas }: HistoricoChamadasProps) 
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredChamadas = chamadas.filter((chamada) => {
-        if (!chamada.associado || !chamada.reuniao) return false;
+        if (!chamada.associado || !chamada.reuniao) {
+return false;
+}
 
         return (
             chamada.associado.nome_completo

@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { ChevronLeft, Search, Settings } from 'lucide-react';
+import { ChevronLeft, Search, Settings, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
 
 import CreateAssociadoModal from '@/components/create-associado-modal';
@@ -20,6 +20,7 @@ interface CadastrosProps {
         id: number | string;
         nome_completo: string;
         numero_inscricao: string;
+        status: boolean;
     }>;
     grupos: Array<{
         id: number | string;
@@ -41,7 +42,7 @@ interface CadastrosListItem {
     name: string;
     number?: string;
     members?: number;
-    status?: string;
+    status?: boolean;
 }
 
 
@@ -51,9 +52,10 @@ interface ListItemProps {
     subtitle: string;
     color: string;
     href: string;
+    isInactive?: boolean;
 }
 
-function ListItem({ id, name, subtitle, color, href }: ListItemProps) {
+function ListItem({ id, name, subtitle, color, href, isInactive }: ListItemProps) {
     const bgColor = {
         purple: 'bg-purple-200 text-purple-700',
         blue: 'bg-blue-200 text-blue-700',
@@ -64,18 +66,33 @@ function ListItem({ id, name, subtitle, color, href }: ListItemProps) {
     return (
         <Link
             href={href}
-            className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-3 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-blue-700 dark:hover:bg-gray-800"
+            className={`flex items-center gap-3 rounded-lg border p-3 transition-colors hover:border-blue-300 hover:bg-blue-50 dark:hover:border-blue-700 dark:hover:bg-gray-800 ${
+                isInactive
+                    ? 'border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/30'
+                    : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'
+            }`}
         >
             <div className={`flex size-12 items-center justify-center rounded-lg font-semibold ${bgColor}`}>
                 {id}
             </div>
             <div className="flex-1 min-w-0">
-                <p className="font-medium text-gray-900 dark:text-white">{name}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{subtitle}</p>
+                <p className={`font-medium ${isInactive ? 'text-red-700 dark:text-red-400 line-through' : 'text-gray-900 dark:text-white'}`}>
+                    {name}
+                </p>
+                <p className={`text-sm ${isInactive ? 'text-red-500 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}>
+                    {subtitle} {isInactive && '(Desativado)'}
+                </p>
             </div>
-            <span className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300">
-                →
-            </span>
+            <div className="flex items-center gap-3">
+                {isInactive ? (
+                    <AlertCircle className="size-5 text-red-600" />
+                ) : (
+                    <CheckCircle2 className="size-5 text-green-600" />
+                )}
+                <span className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-300">
+                    →
+                </span>
+            </div>
         </Link>
     );
 }
@@ -148,6 +165,7 @@ function TabContent({ items, type, onAddClick }: TabContentProps) {
                                     subtitle={item.number ?? ''}
                                     color={colorMap[index % 4]}
                                     href={getItemHref(item)}
+                                    isInactive={item.status === false}
                                 />
                             );
                         }
@@ -171,7 +189,7 @@ function TabContent({ items, type, onAddClick }: TabContentProps) {
                                     key={item.id}
                                     id={item.id}
                                     name={item.name}
-                                    subtitle={item.status ?? ''}
+                                    subtitle={item.status ? 'Ativo' : 'Inativo'}
                                     color={colorMap[index % 4]}
                                     href={getItemHref(item)}
                                 />
@@ -205,6 +223,7 @@ export default function Cadastros({ associados, grupos, projetos }: CadastrosPro
         id: a.id,
         name: a.nome_completo,
         number: a.numero_inscricao,
+        status: a.status,
     }));
 
     const formattedGrupos = grupos.map((g) => ({
@@ -216,7 +235,7 @@ export default function Cadastros({ associados, grupos, projetos }: CadastrosPro
     const formattedProjetos = projetos.map((p) => ({
         id: p.id,
         name: p.nome,
-        status: p.status ? 'Ativo' : 'Inativo',
+        status: p.status,
     }));
 
     return (

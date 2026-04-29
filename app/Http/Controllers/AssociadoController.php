@@ -107,7 +107,7 @@ class AssociadoController extends Controller
     public function deactivate(Associado $associado)
     {
         try {
-            if ($associado->update(['status' => false])) {
+            if ($associado->update(['status' => false, 'grupo_id' => null])) {
                 return response()->json($associado);
             }
         } catch (Exception $e) {

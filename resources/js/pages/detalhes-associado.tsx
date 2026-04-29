@@ -1,5 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { ChevronLeft, CheckCircle2, AlertCircle, FileUp } from 'lucide-react';
+import { ChevronLeft, CheckCircle2, AlertCircle, FileUp, Power } from 'lucide-react';
 import { useState } from 'react';
 
 import AdicionarPagamentoModal from '@/components/adicionar-pagamento-modal';
@@ -58,6 +58,8 @@ export default function DetalhesAssociado({ associado }: DetalhesAssociadoProps)
     const [isComprovanteModalOpen, setIsComprovanteModalOpen] = useState(false);
     const [isAdicionarPagamentoModalOpen, setIsAdicionarPagamentoModalOpen] = useState(false);
     const [selectedPagamento, setSelectedPagamento] = useState<Pagamento | null>(null);
+    const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
+    const [isReactivateModalOpen, setIsReactivateModalOpen] = useState(false);
 
     const associadoForm = useForm({
         nome_completo: associado.nome_completo,
@@ -98,12 +100,34 @@ export default function DetalhesAssociado({ associado }: DetalhesAssociadoProps)
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Detalhes do Associado</h1>
                 </div>
 
-                <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
-                    <p className="font-semibold text-gray-900 dark:text-white">{associado.nome_completo}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Nº Carteirinha - {associado.numero_inscricao}</p>
+                <div className={`rounded-lg border p-4 dark:border-gray-700 dark:bg-gray-900 ${
+                    associado.status
+                        ? 'border-gray-200 bg-white'
+                        : 'border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/30'
+                }`}>
+                    <div className="flex items-start justify-between">
+                        <div>
+                            <p className={`font-semibold ${associado.status ? 'text-gray-900 dark:text-white' : 'text-red-700 dark:text-red-400 line-through'}`}>
+                                {associado.nome_completo}
+                            </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">Nº Carteirinha - {associado.numero_inscricao}</p>
+                        </div>
+                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                            associado.status
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                        }`}>
+                            {associado.status ? 'Ativo' : 'Desativado'}
+                        </span>
+                    </div>
                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                         Grupo: {associado.grupo?.id ?? '-'} | Horário: {associado.grupo?.horario ?? '-'} | Projeto: {associado.grupo?.projeto?.nome ?? '-'}
                     </p>
+                    {!associado.status && (
+                        <p className="mt-2 text-xs text-red-600 dark:text-red-400">
+                            Este associado está desativado e removido do grupo.
+                        </p>
+                    )}
                 </div>
 
                 <div className="flex gap-0 border-b border-gray-200 dark:border-gray-700">
@@ -124,13 +148,44 @@ export default function DetalhesAssociado({ associado }: DetalhesAssociadoProps)
                     <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-900">
                         {!editingInfo ? (
                             <>
+                                <div className="mb-4 flex items-center gap-2">
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">Status:</span>
+                                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                                        associado.status
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                                    }`}>
+                                        {associado.status ? 'Ativo' : 'Desativado'}
+                                    </span>
+                                </div>
                                 <p>CPF: {associado.cpf}</p>
                                 <p>RG: {associado.rg ?? '-'}</p>
                                 <p>E-mail: {associado.email ?? '-'}</p>
                                 <p>Estado civil: {associado.estado_civil}</p>
-                                <Button className="mt-4" variant="outline" onClick={() => setEditingInfo(true)}>
-                                    Editar
-                                </Button>
+                                <div className="mt-4 flex gap-2">
+                                    <Button variant="outline" onClick={() => setEditingInfo(true)}>
+                                        Editar
+                                    </Button>
+                                    {associado.status ? (
+                                        <Button
+                                            variant="destructive"
+                                            onClick={() => setIsDeactivateModalOpen(true)}
+                                            className="gap-2"
+                                        >
+                                            <Power className="size-4" />
+                                            Desativar
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="default"
+                                            onClick={() => setIsReactivateModalOpen(true)}
+                                            className="gap-2 bg-green-600 hover:bg-green-700"
+                                        >
+                                            <Power className="size-4" />
+                                            Ativar
+                                        </Button>
+                                    )}
+                                </div>
                             </>
                         ) : (
                             <form
@@ -378,6 +433,86 @@ export default function DetalhesAssociado({ associado }: DetalhesAssociadoProps)
                         />
                     </div>
                 )}
+
+                {/* Modal de Confirmação - Desativar */}
+                <Dialog open={isDeactivateModalOpen} onOpenChange={setIsDeactivateModalOpen}>
+                    <DialogContent className="max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Confirmar Desativação</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Tem certeza que deseja desativar o associado <strong>{associado.nome_completo}</strong>?
+                            </p>
+                            <p className="text-xs text-red-600 dark:text-red-400">
+                                Isso removerá o associado do grupo atual e alterará seu status para inativo.
+                            </p>
+                            <div className="flex gap-2 pt-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="w-full"
+                                    onClick={() => setIsDeactivateModalOpen(false)}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    className="w-full"
+                                    onClick={() => {
+                                        router.patch(`/api/v1/associados/${associado.id}/deactivate`, {}, {
+                                            onSuccess: () => {
+                                                setIsDeactivateModalOpen(false);
+                                                router.reload();
+                                            },
+                                        });
+                                    }}
+                                >
+                                    Desativar
+                                </Button>
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+                {/* Modal de Confirmação - Ativar */}
+                <Dialog open={isReactivateModalOpen} onOpenChange={setIsReactivateModalOpen}>
+                    <DialogContent className="max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Confirmar Ativação</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                Tem certeza que deseja ativar o associado <strong>{associado.nome_completo}</strong>?
+                            </p>
+                            <div className="flex gap-2 pt-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="w-full"
+                                    onClick={() => setIsReactivateModalOpen(false)}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    type="button"
+                                    className="w-full bg-green-600 hover:bg-green-700"
+                                    onClick={() => {
+                                        router.patch(`/api/v1/associados/${associado.id}/activate`, {}, {
+                                            onSuccess: () => {
+                                                setIsReactivateModalOpen(false);
+                                                router.reload();
+                                            },
+                                        });
+                                    }}
+                                >
+                                    Ativar
+                                </Button>
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </div>
         </>
     );
