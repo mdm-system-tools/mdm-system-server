@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\ChamadaController;
+use App\Http\Controllers\Api\v1\ReuniaoComChamadaController;
 use App\Http\Controllers\AssociadoController;
 use App\Http\Controllers\CepApiClientController;
 use App\Http\Controllers\DividaController;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 Route::post('v1/register', [AuthController::class, 'register'])->name('api.auth.register');
 Route::post('v1/login', [AuthController::class, 'login'])->name('api.auth.login');
+Route::post('v1/email-verify', [AuthController::class, 'forgotPassword'])->name('api.auth.forgot-password');
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
 
@@ -67,6 +69,16 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     // --- CHAMADAS ---
     Route::apiResource('chamadas', ChamadaController::class)
         ->missing($missingModel('Chamada'));
+
+    // --- REUNIOES COM CHAMADAS ---
+    Route::get('reunioes-chamadas', [ReuniaoComChamadaController::class, 'index'])
+        ->name('reunioes-chamadas.index');
+    Route::get('reunioes-chamadas/{reuniao}', [ReuniaoComChamadaController::class, 'show'])
+        ->name('reunioes-chamadas.show')
+        ->missing($missingModel('Reunião'));
+    Route::post('reunioes-chamadas/{reuniao}', [ReuniaoComChamadaController::class, 'storePresenca'])
+        ->name('reunioes-chamadas.store-presenca')
+        ->missing($missingModel('Reunião'));
 
     // --- PAGAMENTOS ---
     Route::apiResource('pagamentos', PagamentoController::class)

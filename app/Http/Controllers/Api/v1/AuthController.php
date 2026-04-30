@@ -8,6 +8,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Validator;
@@ -33,6 +34,25 @@ class AuthController extends Controller
                 'password' => "senha invalida {${$e->getMessage()}}",
             ]);
         }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json(['message' => 'Email não encontrado.'], 404);
+        }
+
+        $status = Password::sendResetLink($request->only('email'));
+
+        return $status === Password::RESET_LINK_SENT
+            ? response()->json(['message' => 'Link de recuperação enviado para seu email.'])
+            : response()->json(['message' => 'Erro ao enviar link de recuperação.'], 500);
     }
 
     public function login(Request $request)

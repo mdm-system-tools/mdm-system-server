@@ -6,8 +6,10 @@ use App\Utils\Formatador;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReuniaoResource extends JsonResource
+class ReuniaoComChamadaResource extends JsonResource
 {
+    public static $wrap = null;
+
     /**
      * Transform the resource into an array.
      *
@@ -15,7 +17,7 @@ class ReuniaoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $data = [
+        return [
             'id' => $this->id,
             'local' => $this->local ? "{$this->local->logradouro}, {$this->local->bairro} - {$this->local->cidade}/{$this->local->estado}"
                 : 'endereço não encontrado',
@@ -26,12 +28,7 @@ class ReuniaoResource extends JsonResource
             'periodo' => Formatador::formatDateToHoursMinutes($this->horario_inicio).
                 ' às '.
                 Formatador::formatDateToHoursMinutes($this->horario_fim),
+            'chamadas' => ChamadaResource::collection($this->whenLoaded('chamadas')),
         ];
-
-        if ($this->relationLoaded('chamadas')) {
-            $data['chamadas'] = ChamadaResource::collection($this->chamadas);
-        }
-
-        return $data;
     }
 }
