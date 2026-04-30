@@ -18,6 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('chamadas', [ChamadaController::class, 'index'])->name('chamadas');
     Route::post('chamadas', [ChamadaController::class, 'store'])->name('chamadas.store');
     Route::put('chamadas/{reuniao}', [ChamadaController::class, 'update'])->name('chamadas.update');
+    Route::delete('chamadas/{reuniao}', [ChamadaController::class, 'destroy'])->name('chamadas.destroy');
     Route::get('chamadas/{reuniao}/grupo/{grupo}/tomar', [ChamadaController::class, 'tomar'])->name('chamadas.tomar');
     Route::patch('chamadas/{reuniao}/grupo/{grupo}/concluir', [ChamadaController::class, 'concluir'])->name('chamadas.concluir');
     Route::get('historico-chamadas', [ChamadaController::class, 'indexHistorico'])->name('historico-chamadas');

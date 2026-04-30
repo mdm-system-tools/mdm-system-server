@@ -19,7 +19,7 @@ class ReuniaoResource extends JsonResource
             'id' => $this->id,
             'local' => $this->local ? "{$this->local->logradouro}, {$this->local->bairro} - {$this->local->cidade}/{$this->local->estado}"
                 : 'endereço não encontrado',
-            'projeto' => $this->projeto->nome,
+            'projeto' => $this->projeto,
             'data_marcada' => $this->data_marcada,
             'horario_inicio' => Formatador::formatDateToHoursMinutes($this->horario_inicio),
             'horario_fim' => Formatador::formatDateToHoursMinutes($this->horario_fim),

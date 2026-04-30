@@ -429,4 +429,22 @@ class ChamadaController extends Controller
 
         return redirect()->route('chamadas')->with('success', 'Reunião atualizada com sucesso!');
     }
+
+    public function destroy(Reuniao $reuniao)
+    {
+        if ($reuniao->concluida) {
+            return redirect()->route('chamadas')->with('error', 'Não é possível excluir reuniões já concluídas.');
+        }
+
+        $reuniao->chamadas()->delete();
+        $reuniao->grupoReuniaos()->delete();
+        $local = $reuniao->local;
+        $reuniao->delete();
+
+        if ($local && $local->tipo === false) {
+            $local->delete();
+        }
+
+        return redirect()->route('chamadas')->with('success', 'Reunião excluída com sucesso!');
+    }
 }

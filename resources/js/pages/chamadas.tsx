@@ -1,5 +1,5 @@
-import { Head, Link, useForm } from '@inertiajs/react';
-import { ChevronLeft, Calendar, Clock, MapPin, Pencil } from 'lucide-react';
+import { Head, Link, useForm, router } from '@inertiajs/react';
+import { ChevronLeft, Calendar, Clock, MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -67,6 +67,18 @@ function ReuniaoCard({
     const gruposConcluidos = reuniao.grupos?.filter((g) => g.concluida).length || 0;
     const totalGrupos = reuniao.grupos?.length || 0;
     const isConcluida = reuniao.concluida;
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+
+    const handleDelete = () => {
+        setDeleting(true);
+        router.delete(`/chamadas/${reuniao.id}`, {
+            onFinish: () => {
+                setDeleting(false);
+                setShowDeleteModal(false);
+            },
+        });
+    };
 
     return (
         <div className={`rounded-lg border p-4 ${isConcluida ? 'border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20' : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900'}`}>
@@ -85,15 +97,26 @@ function ReuniaoCard({
                     </p>
                 </div>
                 {!isConcluida && (
-                    <Button
-                        size="sm"
-                        variant="ghost"
-                        className="gap-2"
-                        onClick={() => onEdit(reuniao)}
-                    >
-                        <Pencil className="size-4" />
-                        Editar
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            className="gap-2"
+                            onClick={() => onEdit(reuniao)}
+                        >
+                            <Pencil className="size-4" />
+                            Editar
+                        </Button>
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            className="gap-2 text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-900/20"
+                            onClick={() => setShowDeleteModal(true)}
+                        >
+                            <Trash2 className="size-4" />
+                            Excluir
+                        </Button>
+                    </div>
                 )}
             </div>
 
@@ -112,7 +135,7 @@ function ReuniaoCard({
                              },
                          );
                      })()}
-                 </div>
+                  </div>
                 <div className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <MapPin className="mt-0.5 size-4 shrink-0" />
                     <span>
@@ -145,6 +168,35 @@ function ReuniaoCard({
                     )}
                 </div>
             </div>
+
+            <Dialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Confirmar exclusão</DialogTitle>
+                        <DialogDescription>
+                            Tem certeza que deseja excluir esta reunião do projeto {reuniao.projeto.nome}?
+                            Esta ação não pode ser desfeita e todas as chamadas associadas serão apagadas.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setShowDeleteModal(false)}
+                        >
+                            Cancelar
+                        </Button>
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={handleDelete}
+                            disabled={deleting}
+                        >
+                            {deleting ? 'Excluindo...' : 'Sim, excluir'}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
