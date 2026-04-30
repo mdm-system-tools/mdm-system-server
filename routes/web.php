@@ -17,8 +17,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Chamadas routes
     Route::get('chamadas', [ChamadaController::class, 'index'])->name('chamadas');
     Route::post('chamadas', [ChamadaController::class, 'store'])->name('chamadas.store');
+    Route::put('chamadas/{reuniao}', [ChamadaController::class, 'update'])->name('chamadas.update');
+    Route::get('chamadas/{reuniao}/grupo/{grupo}/tomar', [ChamadaController::class, 'tomar'])->name('chamadas.tomar');
+    Route::patch('chamadas/{reuniao}/grupo/{grupo}/concluir', [ChamadaController::class, 'concluir'])->name('chamadas.concluir');
     Route::get('historico-chamadas', [ChamadaController::class, 'indexHistorico'])->name('historico-chamadas');
-    Route::get('historico-chamadas/{chamada}', [ChamadaController::class, 'show'])->name('detalhes-chamada');
+    Route::get('historico-chamadas/{reuniao}', [ChamadaController::class, 'show'])->name('detalhes-chamada');
 
     // Cadastros e dashboard routes
     Route::get('cadastros', [CadastrosController::class, 'index'])->name('cadastros');

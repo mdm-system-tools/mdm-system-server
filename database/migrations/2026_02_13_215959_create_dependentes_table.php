@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('dependentes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("associado_id")->constrained();
-            $table->string("nome_completo", 100);
-            $table->string("cpf", 11)->unique();
-            $table->string("rg", 11)->unique();
-            $table->string("certidao", 20)->nullable();
+            $table->foreignId('associado_id')->constrained();
+            $table->string('nome_completo', 100);
+            $table->string('cpf', 11)->unique();
+            $table->string('rg', 11)->unique();
+            $table->string('certidao', 20)->nullable();
             $table->timestamps();
         });
     }

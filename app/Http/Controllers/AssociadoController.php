@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAssociadoRequest;
 use App\Http\Resources\AssociadoResource;
 use App\Models\Associado;
 use App\Models\Dependente;
@@ -11,7 +10,6 @@ use App\Models\Endereco;
 use App\Models\Grupo;
 use App\Models\Pagamento;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +25,7 @@ class AssociadoController extends Controller
     {
         return AssociadoResource::collection(Associado::with(['dependentes', 'grupo', 'endereco'])->get());
     }
+
     public function storeCobranca(Request $request, Associado $associado): RedirectResponse
     {
         $validated = $request->validate([
@@ -58,6 +57,7 @@ class AssociadoController extends Controller
 
         return back()->with('success', 'Cobrança criada com sucesso.');
     }
+
     public function storeDependente(Request $request, Associado $associado): RedirectResponse
     {
         $validated = $request->validate([
@@ -106,6 +106,7 @@ class AssociadoController extends Controller
 
         return back()->with('success', 'Dependente removido com sucesso.');
     }
+
     public function updateAssociado(Request $request, Associado $associado): RedirectResponse
     {
         $validated = $request->validate([
@@ -211,6 +212,7 @@ class AssociadoController extends Controller
 
         return back()->with('success', 'Associado atualizado com sucesso!');
     }
+
     public function setGrupo(Request $request, Associado $associado)
     {
         $validated = $request->validate([

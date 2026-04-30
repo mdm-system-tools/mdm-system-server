@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateChamadaRequest extends FormRequest
@@ -17,27 +18,27 @@ class UpdateChamadaRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'numero_inscricao' => [
-                'exists:associados,numero_inscricao'
+                'exists:associados,numero_inscricao',
             ],
             'reunioes_id' => [
-                'exists:reuniaos,id'
+                'exists:reuniaos,id',
             ],
             'representante' => [
-                'boolean'
+                'boolean',
             ],
             'presenca' => [
-                'boolean'
+                'boolean',
             ],
             'justificativa' => [
                 'nullable',
                 'string',
-                'max:255'
+                'max:255',
             ],
         ];
     }

@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
-use Carbon\Exceptions\Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,8 +16,8 @@ class GrupoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            'projeto' =>[
+            'id' => $this->id,
+            'projeto' => [
                 'nome' => $this->projeto->nome,
             ],
             'horario' => Carbon::parse($this->horario)->format('H:i'),

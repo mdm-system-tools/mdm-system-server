@@ -12,16 +12,16 @@ class Local extends Model
 
     protected $fillable = [
         'nome',
-        "cep",
-        "logradouro",
-        "bairro",
-        "cidade",
-        "estado",
+        'cep',
+        'logradouro',
+        'bairro',
+        'cidade',
+        'estado',
         'regiao',
-        'tipo' // externo ou interno
+        'tipo', // externo ou interno
     ];
 
-    function reunioes(): HasOne
+    public function reunioes(): HasOne
     {
         return $this->hasOne(Reuniao::class);
     }

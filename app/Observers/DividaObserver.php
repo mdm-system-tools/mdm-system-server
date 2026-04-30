@@ -13,12 +13,12 @@ class DividaObserver
      */
     public function created(Divida $divida): void
     {
-        Log::info("observer criado chamado");
+        Log::info('observer criado chamado');
         foreach ($divida->projeto->grupos as $grupo) {
             foreach ($grupo->associados as $associado) {
                 Pagamento::create([
                     'numero_inscricao' => $associado->numero_inscricao,
-                    'divida_id'        => $divida->id,
+                    'divida_id' => $divida->id,
                 ]);
             }
         }

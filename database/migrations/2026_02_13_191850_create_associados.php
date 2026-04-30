@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('estado_civil', 20);
             $table->decimal('renda_familiar', 10)->nullable();
             $table->enum('genero', ['M', 'F']);
-            $table->string("telefone", 15)->nullable();
+            $table->string('telefone', 15)->nullable();
             $table->string('celular', 20)->nullable();
 
             $table->char('cpf', 11)->unique();
@@ -31,9 +31,9 @@ return new class extends Migration
             $table->date('data_nascimento');
             $table->date('data_inscricao')->default(now()->format('Y-m-d'));
 
-            $table->binary("documento_img")->nullable();
-            $table->binary("certidao_img")->nullable();
-            $table->foreignId("grupo_id")->nullable();
+            $table->binary('documento_img')->nullable();
+            $table->binary('certidao_img')->nullable();
+            $table->foreignId('grupo_id')->nullable();
 
             $table->boolean('status')->default(1);
             $table->timestamps();

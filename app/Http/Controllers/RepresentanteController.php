@@ -25,6 +25,7 @@ class RepresentanteController extends Controller
     {
         try {
             $representante = Representante::create($request->validated());
+
             return response()->json(new RepresentanteResource($representante), 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);

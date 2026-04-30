@@ -10,21 +10,28 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Grupo extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'projeto_id',
         'horario',
     ];
 
     protected $casts = [
-        'horario' => 'datetime:H:i',
+        'horario' => 'string',
     ];
 
-    function projeto(): BelongsTo
+    public function projeto(): BelongsTo
     {
         return $this->belongsTo(Projeto::class);
     }
-    function associados(): HasMany
+
+    public function associados(): HasMany
     {
         return $this->hasMany(Associado::class);
+    }
+
+    public function grupoReuniaos(): HasMany
+    {
+        return $this->hasMany(GrupoReuniao::class);
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Grupo;
 use App\Models\Projeto;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Grupo>
+ * @extends Factory<Grupo>
  */
 class GrupoFactory extends Factory
 {
@@ -18,8 +19,8 @@ class GrupoFactory extends Factory
     public function definition(): array
     {
         return [
-            "projeto_id" => Projeto::inRandomOrder()->first()->id,
-            "horario" => $this->faker->time('H:i'),
+            'projeto_id' => Projeto::inRandomOrder()->first()->id,
+            'horario' => $this->faker->time('H:i'),
         ];
     }
 }

@@ -11,25 +11,42 @@ class Reuniao extends Model
 {
     use HasFactory;
 
+    protected $table = 'reunioes';
+
     protected $fillable = [
         'id',
         'local_id',
-        "projeto_id",
-        "data_marcada",
-        "horario_inicio",
-        "horario_fim",
+        'projeto_id',
+        'data_marcada',
+        'concluida',
     ];
 
-    function projeto(): BelongsTo
+    protected $casts = [
+        'concluida' => 'boolean',
+    ];
+
+    public function projeto(): BelongsTo
     {
         return $this->belongsTo(Projeto::class);
     }
-    function local(): BelongsTo
+
+    public function local(): BelongsTo
     {
         return $this->belongsTo(Local::class);
     }
-    function chamada(): HasMany
+
+    public function chamadas(): HasMany
     {
         return $this->hasMany(Chamada::class);
+    }
+
+    public function grupoReuniaos(): HasMany
+    {
+        return $this->hasMany(GrupoReuniao::class);
+    }
+
+    public function grupos()
+    {
+        return $this->hasMany(GrupoReuniao::class)->with('grupo');
     }
 }

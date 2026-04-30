@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('dividas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("projeto_id")->constrained();
-            $table->decimal("valor",10);
-            $table->date("data_divida");
+            $table->foreignId('projeto_id')->constrained();
+            $table->decimal('valor', 10);
+            $table->date('data_divida');
             $table->timestamps();
         });
     }

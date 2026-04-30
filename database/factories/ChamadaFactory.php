@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Associado;
+use App\Models\Chamada;
 use App\Models\Reuniao;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Chamada>
+ * @extends Factory<Chamada>
  */
 class ChamadaFactory extends Factory
 {
@@ -25,7 +26,7 @@ class ChamadaFactory extends Factory
             'reuniao_id' => Reuniao::inRandomOrder()->first()->id,
             'representante' => $associado->representante() && $this->faker->boolean(),
             'presenca' => $this->faker->boolean(),
-            'justificativa' => fn(array $attributes) => !$attributes['presenca'] ? $this->faker->sentence() : null,
+            'justificativa' => fn (array $attributes) => ! $attributes['presenca'] ? $this->faker->sentence() : null,
         ];
     }
 }

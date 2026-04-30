@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Divida;
 use App\Models\Projeto;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Divida>
+ * @extends Factory<Divida>
  */
 class DividaFactory extends Factory
 {

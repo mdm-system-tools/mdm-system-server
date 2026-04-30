@@ -16,8 +16,8 @@ class RepresentanteResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "nome" => $this->nome,
-            "CPF" => Formatador::formatCPF($this->CPF),
+            'nome' => $this->nome,
+            'CPF' => Formatador::formatCPF($this->CPF),
         ];
     }
 }

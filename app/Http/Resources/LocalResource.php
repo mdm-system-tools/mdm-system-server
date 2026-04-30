@@ -26,7 +26,7 @@ class LocalResource extends JsonResource
             'regiao' => $this->regiao,
             'tipo' => $this->tipo ? 'Interno' : 'Externo',
 
-            'endereco_completo' => "{$this->logradouro}, {$this->bairro} - {$this->cidade}/{$this->estado}"
+            'endereco_completo' => "{$this->logradouro}, {$this->bairro} - {$this->cidade}/{$this->estado}",
         ];
     }
 }

@@ -3,11 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\Associado;
-use App\Models\Grupo;
+use App\Models\Dependente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Dependente>
+ * @extends Factory<Dependente>
  */
 class DependenteFactory extends Factory
 {
@@ -19,11 +19,11 @@ class DependenteFactory extends Factory
     public function definition(): array
     {
         return [
-            "associado_id" => Associado::inRandomOrder()->first()->id,
-            "nome_completo" => $this->faker->name(),
-            "cpf" => $this->faker->numerify('###########'),
-            "rg" => $this->faker->numerify('##########'),
-            "certidao" => $this->faker->numerify('##########'),
+            'associado_id' => Associado::inRandomOrder()->first()->id,
+            'nome_completo' => $this->faker->name(),
+            'cpf' => $this->faker->numerify('###########'),
+            'rg' => $this->faker->numerify('##########'),
+            'certidao' => $this->faker->numerify('##########'),
         ];
     }
 }

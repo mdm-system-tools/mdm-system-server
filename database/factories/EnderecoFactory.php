@@ -3,10 +3,11 @@
 namespace Database\Factories;
 
 use App\Models\Associado;
+use App\Models\Endereco;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Endereco>
+ * @extends Factory<Endereco>
  */
 class EnderecoFactory extends Factory
 {
@@ -19,7 +20,7 @@ class EnderecoFactory extends Factory
     {
         return [
             'id' => fake()->unique()->numberBetween(1, 32767),
-            "associado_id" => Associado::inRandomOrder()->first()->id,
+            'associado_id' => Associado::inRandomOrder()->first()->id,
             'cep' => fake()->numerify('#####-###'),
             'logradouro' => fake()->streetName(),
             'bairro' => fake()->streetName(),

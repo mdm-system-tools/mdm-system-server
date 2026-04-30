@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReuniaoRequest extends FormRequest
@@ -17,26 +18,26 @@ class UpdateReuniaoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'local_id' => [
-                'exists:locals,id'
+                'exists:locals,id',
             ],
             'projeto_id' => [
-                'exists:projetos,id'
+                'exists:projetos,id',
             ],
             'data_marcada' => [
-                'date_format:d/m/Y'
+                'date_format:d/m/Y',
             ],
             'horario_inicio' => [
-                'date_format:H:i'
+                'date_format:H:i',
             ],
             'horario_fim' => [
                 'date_format:H:i',
-                'after:horario_inicio'
+                'after:horario_inicio',
             ],
         ];
     }

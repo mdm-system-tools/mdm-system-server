@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LocalRequest;
 use App\Http\Requests\StoreLocalRequest;
 use App\Http\Requests\UpdateLocalRequest;
 use App\Http\Resources\LocalResource;
@@ -26,6 +25,7 @@ class LocalController extends Controller
     {
         try {
             $local = Local::create($request->validated());
+
             return response()->json(new LocalResource($local), 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);
@@ -68,6 +68,7 @@ class LocalController extends Controller
             return response()->json($e->getMessage(), 500);
         }
     }
+
     public function activate(Local $local)
     {
         try {

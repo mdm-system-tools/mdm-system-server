@@ -37,6 +37,6 @@ class DatabaseSeeder extends Seeder
             TokenSeeder::class,
         ]);
 
-//        Pagamento::factory()->count(20)->create();
+        //        Pagamento::factory()->count(20)->create();
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Associado;
 use App\Models\Grupo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Associado>
+ * @extends Factory<Associado>
  */
 class AssociadoFactory extends Factory
 {
@@ -18,7 +19,7 @@ class AssociadoFactory extends Factory
     public function definition(): array
     {
         return [
-            'numero_inscricao' => $this->faker->numerify("#########"),
+            'numero_inscricao' => $this->faker->numerify('#########'),
             'nome_completo' => $this->faker->name,
             'rg' => $this->faker->numerify('#########'),
             'cpf' => $this->faker->numerify('###########'),

@@ -17,7 +17,7 @@ class ChamadaController extends Controller
      */
     public function index()
     {
-        return ChamadaResource::collection(Chamada::with(["reuniao", "associado"])->get());
+        return ChamadaResource::collection(Chamada::with(['reuniao', 'associado'])->get());
     }
 
     /**
@@ -27,20 +27,20 @@ class ChamadaController extends Controller
     {
         try {
             if (empty($request->validated())) {
-                return response()->json(["message" => "dados invalidos"], ResponseAlias::HTTP_BAD_REQUEST);
+                return response()->json(['message' => 'dados invalidos'], ResponseAlias::HTTP_BAD_REQUEST);
             }
 
-            if ($request->validated()["representante"]) {
-                if (Associado::findOrFail($request->validated()["numero_inscricao"])->representante()["id"] == null) {
-                    return response()->json(["message" => "este associado não possui um representante, operação cancelada"], ResponseAlias::HTTP_BAD_REQUEST);
+            if ($request->validated()['representante']) {
+                if (Associado::findOrFail($request->validated()['numero_inscricao'])->representante()['id'] == null) {
+                    return response()->json(['message' => 'este associado não possui um representante, operação cancelada'], ResponseAlias::HTTP_BAD_REQUEST);
                 }
             }
 
             if (Chamada::create($request->validated())) {
-                return response()->json(["message" => "Chamada cadastrada com sucesso!"], ResponseAlias::HTTP_CREATED);
+                return response()->json(['message' => 'Chamada cadastrada com sucesso!'], ResponseAlias::HTTP_CREATED);
             }
         } catch (\Exception $e) {
-            return response()->json(["message" => "Erro ao cadastrar chamada!", "error" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => 'Erro ao cadastrar chamada!', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -59,10 +59,10 @@ class ChamadaController extends Controller
     {
         try {
             if ($chamada->update($request->validated())) {
-                return response()->json(["message" => "Chamada atualizado com sucesso!"], ResponseAlias::HTTP_OK);
+                return response()->json(['message' => 'Chamada atualizado com sucesso!'], ResponseAlias::HTTP_OK);
             }
         } catch (\Exception $e) {
-            return response()->json(["message" => "Erro ao atualizar chamada!", "error" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => 'Erro ao atualizar chamada!', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -73,10 +73,10 @@ class ChamadaController extends Controller
     {
         try {
             if ($chamada->delete()) {
-                return response()->json(["message" => "chamada apagada com sucesso"], ResponseAlias::HTTP_OK);
+                return response()->json(['message' => 'chamada apagada com sucesso'], ResponseAlias::HTTP_OK);
             }
         } catch (\Exception $e) {
-            return response()->json(["message" => "ocorreu um erro", "error" => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json(['message' => 'ocorreu um erro', 'error' => $e->getMessage()], ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

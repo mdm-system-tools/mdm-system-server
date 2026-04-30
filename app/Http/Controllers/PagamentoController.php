@@ -25,6 +25,7 @@ class PagamentoController extends Controller
     {
         try {
             $pagamento = Pagamento::create($request->validated());
+
             return response()->json(new PagamentoResource($pagamento), 201);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);

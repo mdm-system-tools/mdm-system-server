@@ -17,8 +17,8 @@ return new class extends Migration
 
             $table->primary(['titulo_eleitor', 'numero_inscricao']);
 
-            $table->char("zona", 3);
-            $table->char("sacao", 4);
+            $table->char('zona', 3);
+            $table->char('sacao', 4);
             $table->timestamps();
         });
     }

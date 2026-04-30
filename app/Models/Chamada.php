@@ -5,34 +5,36 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Chamada extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'numero_inscricao',
-        "reuniao_id",
-        "representante",
-        "presenca",
-        "justificativa"
+        'associado_id',
+        'reuniao_id',
+        'representante',
+        'presenca',
+        'justificativa',
     ];
 
-    function associado(): BelongsTo
+    protected $casts = [
+        'presenca' => 'boolean',
+        'representante' => 'boolean',
+    ];
+
+    public function associado(): BelongsTo
     {
-        return $this->belongsTo(Associado::class, 'numero_inscricao', 'numero_inscricao');
+        return $this->belongsTo(Associado::class);
     }
 
-    //TODO Adiciona modelo representante
-//    function representante(): BelongsTo
-//    {
-//        return $this->belongsTo(Representante::class);
-//    }
+    // TODO Adiciona modelo representante
+    //    function representante(): BelongsTo
+    //    {
+    //        return $this->belongsTo(Representante::class);
+    //    }
 
-    function reuniao(): BelongsTo
+    public function reuniao(): BelongsTo
     {
         return $this->belongsTo(Reuniao::class);
     }

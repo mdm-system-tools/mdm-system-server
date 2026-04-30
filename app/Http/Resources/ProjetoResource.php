@@ -16,9 +16,9 @@ class ProjetoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "id" => $this->id,
-            "grupos" =>$this->grupos->isNotEmpty() ? [
-                "horario" => $this->grupos
+            'id' => $this->id,
+            'grupos' => $this->grupos->isNotEmpty() ? [
+                'horario' => $this->grupos
                     ->sortBy('horario')
                     ->map(function ($grupo) {
                         return Carbon::parse($grupo->horario)->format('H:i');
@@ -26,11 +26,11 @@ class ProjetoResource extends JsonResource
                     ->values()
                     ->all(),
             ] : null,
-            "nome" => $this->nome,
-            "regiao" => $this->regiao,
-            'valor' => number_format($this->valor, "2", ",", "."),
-            'status' => $this->status ? "ativo" : "inativo",
-            "concluido" => $this->concluido ? "sim" : "nao",
+            'nome' => $this->nome,
+            'regiao' => $this->regiao,
+            'valor' => number_format($this->valor, '2', ',', '.'),
+            'status' => $this->status ? 'ativo' : 'inativo',
+            'concluido' => $this->concluido ? 'sim' : 'nao',
         ];
     }
 }

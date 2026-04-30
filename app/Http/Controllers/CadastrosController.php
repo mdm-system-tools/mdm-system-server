@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Associado;
 use App\Models\Chamada;
-use App\Models\Endereco;
 use App\Models\Grupo;
 use App\Models\Projeto;
 use App\Models\Reuniao;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -37,15 +33,15 @@ class CadastrosController extends Controller
     {
         $currentMonth = now()->startOfMonth();
         $currentMonthEnd = now()->endOfMonth();
+        $today = now()->format('Y-m-d');
 
-        // Contar totais
         $totalProjetos = Projeto::count();
         $totalAssociados = Associado::count();
         $totalConcluidas = Chamada::where('presenca', true)->count();
 
-        // Buscar reuniões do mês atual com seus projetos
         $reunioesMes = Reuniao::query()
             ->whereBetween('data_marcada', [$currentMonth, $currentMonthEnd])
+            ->whereDate('data_marcada', '>=', $today)
             ->with([
                 'projeto:id,nome',
                 'projeto.grupos:id,projeto_id,horario',
@@ -54,10 +50,10 @@ class CadastrosController extends Controller
             ->orderBy('data_marcada')
             ->get();
 
-        // Buscar projetos que têm reuniões no mês
         $projetosComReuniao = Projeto::query()
-            ->whereHas('reunioes', function ($query) use ($currentMonth, $currentMonthEnd) {
-                $query->whereBetween('data_marcada', [$currentMonth, $currentMonthEnd]);
+            ->whereHas('reunioes', function ($query) use ($currentMonth, $currentMonthEnd, $today) {
+                $query->whereBetween('data_marcada', [$currentMonth, $currentMonthEnd])
+                    ->whereDate('data_marcada', '>=', $today);
             })
             ->get(['id', 'nome']);
 

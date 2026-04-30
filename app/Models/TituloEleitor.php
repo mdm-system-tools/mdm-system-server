@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TituloEleitor extends Model
 {
-    use hasFactory;
+    use HasFactory;
+
     protected $fillable = [
-        "numero_inscricao",
-        "zona",
-        "sacao",
+        'numero_inscricao',
+        'zona',
+        'sacao',
     ];
 
-    function associado(): BelongsTo
+    public function associado(): BelongsTo
     {
         return $this->belongsTo(Associado::class);
     }

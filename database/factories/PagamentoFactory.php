@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Models\Associado;
 use App\Models\Divida;
+use App\Models\Pagamento;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pagamento>
+ * @extends Factory<Pagamento>
  */
 class PagamentoFactory extends Factory
 {
@@ -24,7 +25,7 @@ class PagamentoFactory extends Factory
             'status' => 'Pago',
             'metodo_pagamento' => $this->faker->randomElement(['cartão de crédito', 'boleto', 'pix']),
             'data_pagamento' => $this->faker->date(),
-            'comprovante' => 'comprovantes/' . $this->faker->uuid() . '.pdf',
+            'comprovante' => 'comprovantes/'.$this->faker->uuid().'.pdf',
         ];
     }
 }

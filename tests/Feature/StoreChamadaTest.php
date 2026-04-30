@@ -27,7 +27,6 @@ test('can create chamada with valid data', function () {
     $data = [
         'projeto_id' => $projeto->id,
         'data_marcada' => now()->addDay()->format('Y-m-d'),
-        'horario_inicio' => '14:30',
         'local' => [
             'logradouro' => 'Rua exemplo',
             'numero' => '123',
@@ -59,7 +58,7 @@ test('can create chamada with valid data', function () {
     // Verify each chamada has correct data
     $reuniao->chamadas()->each(function ($chamada) {
         expect($chamada->presenca)->toBeFalse();
-        expect($chamada->numero_inscricao)->not->toBeNull();
+        expect($chamada->associado_id)->not->toBeNull();
     });
 });
 
@@ -100,4 +99,110 @@ test('cannot create chamada with invalid projeto_id', function () {
     $response = $this->actingAs($user)->post('/chamadas', $data);
 
     $response->assertSessionHasErrors('projeto_id');
+});
+
+test('can update reuniao with valid data', function () {
+    $user = User::factory()->create();
+
+    $projeto = Projeto::factory()->create();
+    $grupo = Grupo::factory()->create(['projeto_id' => $projeto->id]);
+    Associado::factory()->count(2)->create(['grupo_id' => $grupo->id]);
+
+    $local = Local::factory()->create();
+    $reuniao = Reuniao::factory()->create([
+        'projeto_id' => $projeto->id,
+        'local_id' => $local->id,
+    ]);
+
+    $newProjeto = Projeto::factory()->create();
+
+    $data = [
+        'projeto_id' => $newProjeto->id,
+        'data_marcada' => now()->addDays(2)->format('Y-m-d'),
+        'local' => [
+            'logradouro' => 'Nova Rua',
+            'numero' => '456',
+            'bairro' => 'Novo Bairro',
+            'cidade' => 'Nova Cidade',
+        ],
+    ];
+
+    $response = $this->actingAs($user)->put("/chamadas/{$reuniao->id}", $data);
+
+    $response->assertRedirect('/chamadas');
+    $response->assertSessionHas('success', 'Reunião atualizada com sucesso!');
+
+    $reuniao->refresh();
+    expect($reuniao->projeto_id)->toBe($newProjeto->id);
+    expect(Local::where('logradouro', 'Nova Rua')->where('bairro', 'Novo Bairro')->exists())->toBeTrue();
+});
+
+test('cannot update reuniao with invalid projeto_id', function () {
+    $user = User::factory()->create();
+
+    $projeto = Projeto::factory()->create();
+    $grupo = Grupo::factory()->create(['projeto_id' => $projeto->id]);
+    Associado::factory()->count(2)->create(['grupo_id' => $grupo->id]);
+
+    $local = Local::factory()->create();
+    $reuniao = Reuniao::factory()->create([
+        'projeto_id' => $projeto->id,
+        'local_id' => $local->id,
+    ]);
+
+    $data = [
+        'projeto_id' => 9999,
+        'data_marcada' => now()->addDay()->format('Y-m-d'),
+    ];
+
+    $response = $this->actingAs($user)->put("/chamadas/{$reuniao->id}", $data);
+
+    $response->assertSessionHasErrors('projeto_id');
+});
+
+test('cannot update reuniao without data_marcada', function () {
+    $user = User::factory()->create();
+
+    $projeto = Projeto::factory()->create();
+    $grupo = Grupo::factory()->create(['projeto_id' => $projeto->id]);
+    Associado::factory()->count(2)->create(['grupo_id' => $grupo->id]);
+
+    $local = Local::factory()->create();
+    $reuniao = Reuniao::factory()->create([
+        'projeto_id' => $projeto->id,
+        'local_id' => $local->id,
+    ]);
+
+    $data = [
+        'projeto_id' => $projeto->id,
+    ];
+
+    $response = $this->actingAs($user)->put("/chamadas/{$reuniao->id}", $data);
+
+    $response->assertSessionHasErrors('data_marcada');
+});
+
+test('cannot update past reuniao', function () {
+    $user = User::factory()->create();
+
+    $projeto = Projeto::factory()->create();
+    $grupo = Grupo::factory()->create(['projeto_id' => $projeto->id]);
+    Associado::factory()->count(2)->create(['grupo_id' => $grupo->id]);
+
+    $local = Local::factory()->create();
+    $reuniao = Reuniao::factory()->create([
+        'projeto_id' => $projeto->id,
+        'local_id' => $local->id,
+        'data_marcada' => now()->subDays(2)->format('Y-m-d'),
+    ]);
+
+    $data = [
+        'projeto_id' => $projeto->id,
+        'data_marcada' => now()->subDays(2)->format('Y-m-d'),
+    ];
+
+    $response = $this->actingAs($user)->put("/chamadas/{$reuniao->id}", $data);
+
+    $response->assertRedirect('/chamadas');
+    $response->assertSessionHas('error', 'Não é possível editar reuniões já concluídas.');
 });

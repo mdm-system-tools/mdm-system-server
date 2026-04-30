@@ -11,14 +11,14 @@ class Dependente extends Model
     use HasFactory;
 
     protected $fillable = [
-        "associado_id",
+        'associado_id',
         'nome_completo',
-        "cpf",
-        "rg",
-        "certidao",
+        'cpf',
+        'rg',
+        'certidao',
     ];
 
-    function associado(): BelongsTo
+    public function associado(): BelongsTo
     {
         return $this->belongsTo(Associado::class);
     }

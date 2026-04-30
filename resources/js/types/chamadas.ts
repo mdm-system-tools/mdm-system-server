@@ -1,21 +1,26 @@
 export interface Local {
     id: number;
     logradouro: string;
-    numero: string;
     bairro: string;
     cidade: string;
 }
 
-export interface Grupo {
+export interface GrupoProjeto {
     id: number;
     projeto_id: number;
     horario: string;
 }
 
+export interface GrupoReuniao {
+    id: number;
+    horario: string;
+    concluida: boolean;
+}
+
 export interface Projeto {
     id: number;
     nome: string;
-    grupos: Grupo[];
+    grupos: GrupoProjeto[];
 }
 
 export interface Reuniao {
@@ -23,9 +28,11 @@ export interface Reuniao {
     data_marcada: string;
     horario_inicio: string;
     projeto_id: number;
-    local_id: number;
+    local_id: number | null;
     projeto: Projeto;
-    local: Local;
+    local: Local | null;
+    grupos: GrupoReuniao[];
+    concluida: boolean;
 }
 
 export interface ChamadasProps {
@@ -33,7 +40,7 @@ export interface ChamadasProps {
     projetos?: Array<{
         id: number;
         nome: string;
-        grupos?: Grupo[];
+        grupos?: GrupoProjeto[];
     }>;
     flash?: {
         success?: string;

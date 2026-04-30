@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProjetoRequest;
-use App\Http\Requests\UpdateProjetoRequest;
 use App\Http\Resources\ProjetoResource;
 use App\Models\Projeto;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -55,7 +52,7 @@ class ProjetoController extends Controller
         Projeto::query()->create([
             'nome' => $validated['nome'],
             'regiao' => $validated['regiao'],
-            'valor' => (float)str_replace(',', '.', preg_replace('/[^\d,.-]/', '', $validated['valor'])),
+            'valor' => (float) str_replace(',', '.', preg_replace('/[^\d,.-]/', '', $validated['valor'])),
         ]);
 
         return to_route('cadastros')->with('success', 'Projeto criado com sucesso.');

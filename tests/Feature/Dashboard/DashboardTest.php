@@ -2,7 +2,6 @@
 
 use App\Models\Associado;
 use App\Models\Chamada;
-use App\Models\Grupo;
 use App\Models\Local;
 use App\Models\Projeto;
 use App\Models\Reuniao;

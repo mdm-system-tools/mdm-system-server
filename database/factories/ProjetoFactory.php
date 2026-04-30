@@ -21,7 +21,7 @@ class ProjetoFactory extends Factory
             'valor' => $this->faker->randomFloat(2, 0, 1000),
             'nome' => $this->faker->jobTitle,
             'regiao' => $this->faker->lexify('Regiao ???'),
-            "concluido" => $this->faker->boolean(),
+            'concluido' => $this->faker->boolean(),
         ];
     }
 }

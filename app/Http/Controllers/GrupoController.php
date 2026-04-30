@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGrupoRequest;
-use App\Http\Requests\UpdateGrupoRequest;
 use App\Http\Resources\GrupoResource;
 use App\Models\Grupo;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

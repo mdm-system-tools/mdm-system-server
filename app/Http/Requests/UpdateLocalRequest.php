@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateLocalRequest extends FormRequest
@@ -17,7 +18,7 @@ class UpdateLocalRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -25,42 +26,42 @@ class UpdateLocalRequest extends FormRequest
             'nome' => [
                 'required',
                 'string',
-                'max:255'
+                'max:255',
             ],
             'cep' => [
                 'required',
                 'string',
-//                'formato_cep',
+                //                'formato_cep',
             ],
             'logradouro' => [
                 'required',
                 'string',
-                'max:255'
+                'max:255',
             ],
             'bairro' => [
                 'required',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'cidade' => [
                 'required',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'estado' => [
                 'required',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'regiao' => [
                 'required',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'tipo' => [
                 'required',
                 'string',
-                'in:Interno,Externo'
+                'in:Interno,Externo',
             ],
         ];
     }

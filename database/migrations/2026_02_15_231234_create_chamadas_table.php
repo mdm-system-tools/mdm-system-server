@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('chamadas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("associado_id")->constrained();
-            $table->foreignId("reuniao_id");
+            $table->foreignId('associado_id')->constrained();
+            $table->foreignId('reuniao_id');
             $table->boolean('representante')->nullable();
             $table->boolean('presenca');
-            $table->string("justificativa", 100)->nullable();
+            $table->string('justificativa', 100)->nullable();
             $table->timestamps();
         });
     }

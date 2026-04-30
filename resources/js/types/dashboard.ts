@@ -5,7 +5,6 @@ import { home } from '@/routes';
 export interface Local {
     id: number;
     logradouro: string;
-    numero: string;
     bairro: string;
     cidade: string;
 }
@@ -27,9 +26,9 @@ export interface Reuniao {
     data_marcada: string;
     horario_inicio: string;
     projeto_id: number;
-    local_id: number;
+    local_id: number | null;
     projeto: Projeto;
-    local: Local;
+    local: Local | null;
 }
 
 export interface DashboardProps {

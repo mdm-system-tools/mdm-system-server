@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGrupoRequest extends FormRequest
@@ -17,13 +18,13 @@ class StoreGrupoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            "horario" => ["required", "date_format:H:i"],
-            "projeto_id" => ["required", "exists:App\Models\Projeto,id"],
+            'horario' => ['required', 'date_format:H:i'],
+            'projeto_id' => ['required', "exists:App\Models\Projeto,id"],
         ];
     }
 }

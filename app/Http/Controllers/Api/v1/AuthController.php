@@ -22,15 +22,15 @@ class AuthController extends Controller
         ])->validated();
 
         try {
-            $user = User::where("email", $request->email)->firstOrFail();
+            $user = User::where('email', $request->email)->firstOrFail();
             $user->update([
-                "password" => Hash::make($request->password)
+                'password' => Hash::make($request->password),
             ]);
 
             return response()->json("Senha alterada com sucesso $user");
         } catch (ValidationException $e) {
             throw ValidationException::withMessages([
-                "password" => "senha invalida {${$e->getMessage()}}"
+                'password' => "senha invalida {${$e->getMessage()}}",
             ]);
         }
     }
@@ -43,32 +43,32 @@ class AuthController extends Controller
             'device_name' => 'required',
         ]);
 
-        //TODO Desativado validação de email
-//        $request->user()->sendEmailVerificationNotification(); porque isso esta aqui ? sem antes verifica ? hasEmailVeirify()
+        // TODO Desativado validação de email
+        //        $request->user()->sendEmailVerificationNotification(); porque isso esta aqui ? sem antes verifica ? hasEmailVeirify()
 
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = User::where('email', $request->email)->firstOrFail();
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
+            if (! $user || ! Hash::check($request->password, $user->password)) {
                 throw ValidationException::withMessages([
                     'email' => ['The provided credentials are incorrect.'],
                 ]);
             }
 
-            //TODO Desativado validação de email
-//            if ($user->email_verified_at == null) {
-//                throw ValidationException::withMessages([
-//                    'email' => ['email não verificado, seque a sua caixa de entrada.'],
-//                ]);
-//            }
+            // TODO Desativado validação de email
+            //            if ($user->email_verified_at == null) {
+            //                throw ValidationException::withMessages([
+            //                    'email' => ['email não verificado, seque a sua caixa de entrada.'],
+            //                ]);
+            //            }
 
             return response()->json([
-                "token" => $user->createToken($request->device_name)->plainTextToken,
+                'token' => $user->createToken($request->device_name)->plainTextToken,
                 'userId' => $user->id,
             ]);
         }
 
-        return response()->json("Unauthorized", 403);
+        return response()->json('Unauthorized', 403);
     }
 
     public function register(Request $request)
@@ -81,8 +81,8 @@ class AuthController extends Controller
         try {
             $user = User::create($valid);
 
-            //TODO Desativado validação de email
-            //$user->sendEmailVerificationNotification();
+            // TODO Desativado validação de email
+            // $user->sendEmailVerificationNotification();
 
             return response()->json('Usuário criado! Verifique seu e-mail.', 201);
         } catch (ValidationException $e) {
@@ -99,6 +99,7 @@ class AuthController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->json(["message" => "usuario apagado com sucesso!"], ResponseAlias::HTTP_OK);
+
+        return response()->json(['message' => 'usuario apagado com sucesso!'], ResponseAlias::HTTP_OK);
     }
 }

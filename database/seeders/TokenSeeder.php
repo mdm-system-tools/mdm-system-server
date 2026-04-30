@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TokenSeeder extends Seeder
@@ -34,12 +33,12 @@ class TokenSeeder extends Seeder
         // Você pode inserir diretamente na tabela personal_access_tokens
         \DB::table('personal_access_tokens')->insert([
             'tokenable_type' => 'App\Models\User',
-            'tokenable_id'   => $user->id,
-            'name'           => 'fixed-token',
-            'token'          => hash('sha256', '1234567890'), // O token real será '1234567890'
-            'abilities'      => '["*"]',
-            'created_at'     => now(),
-            'updated_at'     => now(),
+            'tokenable_id' => $user->id,
+            'name' => 'fixed-token',
+            'token' => hash('sha256', '1234567890'), // O token real será '1234567890'
+            'abilities' => '["*"]',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

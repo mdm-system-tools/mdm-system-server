@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePagamentoRequest extends FormRequest
@@ -17,28 +18,28 @@ class StorePagamentoRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'numero_inscricao' => [
                 'required',
-                'exists:associados,numero_inscricao'
+                'exists:associados,numero_inscricao',
             ],
             'valor' => [
                 'required',
                 'numeric',
-                'gt:0'
+                'gt:0',
             ],
             'mes_referencia' => [
                 'required',
-                'date_format:m/Y'
+                'date_format:m/Y',
             ],
             'comprovante' => [
                 'file',
                 'mimes:jpg,jpeg,png,pdf',
-                'max:2048'
+                'max:2048',
             ],
         ];
     }

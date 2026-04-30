@@ -46,11 +46,11 @@ const quickActionItems: QuickActionItem[] = [
         icon: FileText,
         href: cadastros().url,
     },
-    {
-        title: 'Gerenciamento de Funcionários',
-        icon: Users2,
-        onClick: getFuncionarios,
-    },
+    //{
+    //    title: 'Gerenciamento de Funcionários',
+    //    icon: Users2,
+    //    onClick: getFuncionarios,
+    //},
 ];
 
 export function AppSidebar() {
