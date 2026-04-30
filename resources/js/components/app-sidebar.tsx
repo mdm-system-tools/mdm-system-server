@@ -26,10 +26,6 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const getFuncionarios = () => {
-    console.log('buscando funcionários');
-};
-
 const quickActionItems: QuickActionItem[] = [
     {
         title: 'Chamada',
@@ -46,11 +42,6 @@ const quickActionItems: QuickActionItem[] = [
         icon: FileText,
         href: cadastros().url,
     },
-    //{
-    //    title: 'Gerenciamento de Funcionários',
-    //    icon: Users2,
-    //    onClick: getFuncionarios,
-    //},
 ];
 
 export function AppSidebar() {
